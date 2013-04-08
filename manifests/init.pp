@@ -1,7 +1,7 @@
 class itop
 {
   anchor { 'itop::start': }->
-  class { 'itop::install': }->
+  class { 'itop::package': }->
   class { 'itop::instance': }->
   anchor { 'itop::end': }
 }

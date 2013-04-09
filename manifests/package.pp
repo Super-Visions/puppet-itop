@@ -1,13 +1,25 @@
 class itop::package(  
-  ensure = present,   
+  $ensure = present,   
 ) {
 
-  $source = "/downloads/iTop-${ensure}-noarch.rpm"
+  #package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
+  package{ [ "php-mysql", "php-soap", "php-ldap"  ]:
+    ensure => installed,
+  }
+
+  package{ [ "php-domxml-php4-php5" ]:
+    ensure => installed,
+  }
+
+  package{ [ "php-mcrypt" ]:
+    ensure => installed,
+  }
+
+  $source = "/downloads/iTop-${ensure}.noarch.rpm"
 
   package { 'iTop':
     ensure   => $ensure,
-    source   => $source
+    source   => $source,
     provider => 'rpm',
   }
-
 }

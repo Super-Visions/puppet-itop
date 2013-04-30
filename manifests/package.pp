@@ -1,17 +1,21 @@
-class itop::package(  
-  $ensure = present,   
-) {
+#
+# Class itop::package
+#
+class itop::package(
+  $ensure = present,
+)
+{
 
   #package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
-  package{ [ "php-mysql", "php-soap", "php-ldap"  ]:
+  package{ [ 'php-mysql', 'php-soap', 'php-ldap'  ]:
     ensure => installed,
   }
 
-  package{ [ "php-domxml-php4-php5" ]:
+  package{ [ 'php-domxml-php4-php5' ]:
     ensure => installed,
   }
 
-  package{ [ "php-mcrypt" ]:
+  package{ [ 'php-mcrypt' ]:
     ensure => installed,
   }
 

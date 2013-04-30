@@ -1,6 +1,9 @@
+#
+# Class itop::instance
+#
 class itop::instance (
- $installdir = '/tmp',
- $docroot = hiera('itop::docroot', '/var/www/html')
+  $installdir = '/tmp',
+  $docroot    = hiera('itop::docroot', '/var/www/html')
 ) {
 
   exec { '/usr/local/itop/bin/install_itop_site': }
@@ -11,7 +14,6 @@ class itop::instance (
 
   file { [ "${installdir}/dl", "${installdir}/Extra-Ext", $docroot ]:
     ensure  => directory,
-    owner   => $user,
   }
 
 }

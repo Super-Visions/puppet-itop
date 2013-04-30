@@ -1,11 +1,13 @@
-
+#
+# Class itop::install
+#
 class itop::install (
-  $version,
-  $php_version = '',
+  $version        = '',
+  $php_version    = '',
   $teemip_version = '',
-  $user = 'apache',
-  $installdir = '/var/www',
-  $docroot = '/var/www/html',
+  $user           = 'apache',
+  $installdir     = '/var/www',
+  $docroot        = '/var/www/html',
 )
 {
   #$installdir = '/usr/app/ApacheDomain/DomainITOP01ACC'
@@ -38,7 +40,7 @@ class itop::install (
   package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
     ensure => installed,
   }
-  package{ [ "php-domxml-php4-php5" ]:
+  package{ [ 'php-domxml-php4-php5' ]:
     ensure => installed,
   }
   # Not available on EPEL EL 5
@@ -60,22 +62,22 @@ class itop::install (
 
   file{ "${installdir}/dl/toolkit-2.0.zip":
     ensure  => present,
-    source  => "puppet:///modules/itop/toolkit-2.0.zip",
+    source  => 'puppet:///modules/itop/toolkit-2.0.zip',
     require => File["${installdir}/dl"],
   }
 
   exec{ 'unpack iTop2':
-    command => "unzip ${installdir}/dl/iTop-${version}.zip",
-    cwd     => "${installdir}/itop-${version}/",
-    creates => "${installdir}/itop-${version}/INSTALL",
-    subscribe => File["${installdir}/dl/iTop-${version}.zip"],
+    command     => "unzip ${installdir}/dl/iTop-${version}.zip",
+    cwd         => "${installdir}/itop-${version}/",
+    creates     => "${installdir}/itop-${version}/INSTALL",
+    subscribe   => File["${installdir}/dl/iTop-${version}.zip"],
     refreshonly => true,
   }
 
   exec{ 'copy iTop2':
-    command   => "cp -Rp ${installdir}/itop-${version}/web/* ${docroot}/",
-    creates   => "${docroot}/index.php",
-    subscribe => Exec['unpack iTop2'],
+    command     => "cp -Rp ${installdir}/itop-${version}/web/* ${docroot}/",
+    creates     => "${docroot}/index.php",
+    subscribe   => Exec['unpack iTop2'],
     refreshonly => true,
   }
 
@@ -88,7 +90,7 @@ class itop::install (
   cron { 'iTop_cron':
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
   }
-  
+
   if $teemip_version != '' {
     file{ "${installdir}/dl/teemip-module-${teemip_version}.zip":
       ensure  => present,
@@ -100,7 +102,7 @@ class itop::install (
       command => "unzip ${installdir}/dl/teemip-module-${teemip_version}.zip",
       cwd     => "${docroot}/extensions",
       creates => "${docroot}/extensions/teemip-config-mgmt-adaptor/",
-      require => [File["${docroot}"],File["${installdir}/dl/teemip-module-${teemip_version}.zip"]],
+      require => [File[$docroot],File["${installdir}/dl/teemip-module-${teemip_version}.zip"]],
     }
 
     exec{ 'extensions dir perms':
@@ -120,7 +122,7 @@ class itop::install (
     command => "unzip ${installdir}/dl/toolkit-2.0.zip",
     cwd     => $docroot,
     creates => "${docroot}/toolkit",
-    require => [File["${docroot}"],File["${installdir}/dl/toolkit-2.0.zip"]],
+    require => [File[$docroot],File["${installdir}/dl/toolkit-2.0.zip"]],
   }
 
   exec{ 'webroot dir perms':

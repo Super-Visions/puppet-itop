@@ -32,41 +32,23 @@ class itop::install::zip (
     owner   => $user,
   }
 
-  #file{ "${installdir}/dl/iTop-${version}.zip":
-  #  ensure  => present,
-  #  source  => "puppet:///modules/itop/iTop-${version}.zip",
-  #  require => File["${installdir}/dl"],
-  #}
-
   archive { "iTop-${version}":
     ensure    => present,
     checksum  => false,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => "${installdir}/dl/iTop-${version}",
+    target    => "/usr/local/itop",
+    #target    => "${installdir}/dl/iTop-${version}",
   }
-
-  #file{ "${installdir}/dl/toolkit-2.0.zip":
-  #  ensure  => present,
-  #  source  => 'puppet:///modules/itop/toolkit-2.0.zip',
-  #  require => File["${installdir}/dl"],
-  #}
 
   archive { "toolkit-2.0":
     ensure    => present,
     checksum  => false,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => "${installdir}/dl/toolkit-2.0",
+    target    => "/usr/local/itop",
+    #target    => "${installdir}/dl/toolkit-2.0",
   }
-
-  #exec{ 'unpack iTop2':
-  #  command     => "unzip ${installdir}/dl/iTop-${version}.zip",
-  #  cwd         => "${installdir}/itop-${version}/",
-  #  creates     => "${installdir}/itop-${version}/INSTALL",
-  #  subscribe   => File["${installdir}/dl/iTop-${version}.zip"],
-  #  refreshonly => true,
-  #}
 
 #  exec{ 'copy iTop2':
 #    command     => "cp -Rp ${installdir}/itop-${version}/web/* ${docroot}/",

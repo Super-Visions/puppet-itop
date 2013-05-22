@@ -32,7 +32,7 @@ class itop::install::zip (
 
   archive { "iTop-${version}":
     ensure    => present,
-    #checksum  => false,
+    checksum  => false,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
     target    => "/usr/local/itop",
@@ -41,7 +41,7 @@ class itop::install::zip (
 
   archive { "toolkit-2.0":
     ensure    => present,
-    #checksum  => false,
+    checksum  => false,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
     target    => "/usr/local/itop/web",

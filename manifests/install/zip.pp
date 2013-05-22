@@ -5,8 +5,8 @@ class itop::install::zip (
   $ensure,
   $url,
   $php_version    = '',
-  $user           = 'apache',
-  $installdir     = '/var/www',
+  #$user           = 'apache',
+  #$installdir     = '/var/www',
 )
 {
   $version = $ensure
@@ -25,10 +25,10 @@ class itop::install::zip (
   #  ensure => installed,
   #}
 
-  file { [ "${installdir}/dl","${installdir}/session", "${installdir}/itop-${version}" ]:
-    ensure  => directory,
-    owner   => $user,
-  }
+  #file { [ "${installdir}/dl","${installdir}/session", "${installdir}/itop-${version}" ]:
+  #  ensure  => directory,
+  #  owner   => $user,
+  #}
 
   archive { "iTop-${version}":
     ensure    => present,

@@ -40,6 +40,7 @@ class itop::install::zip (
 
   archive { "iTop-${version}":
     ensure    => present,
+    checksum  => false,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
     target    => "${installdir}",
@@ -53,6 +54,7 @@ class itop::install::zip (
 
   archive { "toolkit-2.0":
     ensure    => present,
+    checksum  => false,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
     target    => "${installdir}",

@@ -8,7 +8,7 @@ define itop::instance (
   $group = 'apache',
 ) {
 
-  file { [ $installdir, $docroot ]:
+  file { [ $installdir ]:
     ensure => directory,
     mode   => '0755',
   }
@@ -23,6 +23,13 @@ define itop::instance (
 
   file { [ "${installdir}/${name}", "${installdir}/${name}/dl", "${installdir}/${name}/Extra-Ext" ]:
     ensure  => directory,
+  }
+
+  file { $docroot:
+    ensure  => directory,
+    mode    => '0755',
+    recurse => true,
+    require => Exec["iTop_install_${name}"],
   }
 
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production", "${docroot}/log" ]:

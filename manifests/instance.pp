@@ -12,7 +12,7 @@ class itop::instance (
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
   }
 
-  file { [ "${installdir}/dl", "${installdir}/Extra-Ext", $docroot ]:
+  file { [ "${installdir}/dl", "${installdir}/Extra-Ext" ]:
     ensure  => directory,
   }
 

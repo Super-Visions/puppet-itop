@@ -27,7 +27,7 @@ class itop::install::zip (
   #  ensure => installed,
   #}
 
-  file { [ "${installdir}/dl","${installdir}/session", "${installdir}/itop-${version}", $docroot ]:
+  file { [ "${installdir}/dl","${installdir}/session", "${installdir}/itop-${version}" ]:
     ensure  => directory,
     owner   => $user,
   }

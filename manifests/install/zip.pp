@@ -51,6 +51,17 @@ class itop::install::zip (
     require   => Archive["iTop-${version}"],
   }
 
+  file { '/usr/local/itop/bin':
+    ensure => directory,
+    require   => Archive["iTop-${version}"],
+  }
+  file { '/usr/local/itop/bin/install_itop_site':
+    ensure  => present,
+    content => template('itop/install_itop_site'),
+    mode    => '0750',
+    require => File['/usr/local/itop/bin']
+  }
+
 #  exec{ 'copy iTop2':
 #    command     => "cp -Rp ${installdir}/itop-${version}/web/* ${docroot}/",
 #    creates     => "${docroot}/index.php",

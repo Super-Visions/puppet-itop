@@ -1,0 +1,104 @@
+#!/usr/bin/env perl
+
+use Getopt::Long;
+
+my $debug = 0;
+my $root  = '/var/www/html';
+my $user  = 'apache';
+my $group = 'apache';
+my $force;
+
+my $source = '/usr/local/itop';
+
+$result = GetOptions (
+  "debug:i" => \$debug,
+  "root=s"  => \$root,
+  "user=s"  => \$user,
+  "group=s" => \$group,
+  "force"   => \$force
+);
+
+if( ! -d $root ) {
+  die "Specified root does not exist\n";
+}
+
+if( ! -d "${source}/web" ) {
+  die "iTop install source not found in ${source}/web...\n";
+}
+
+if( ! -d "$root/core" ) {
+  copy();
+}
+else
+{
+  copy() if comp_ver() || $force;
+}
+
+sub copy
+{
+  my ($login,$pass,$uid,$gid) = getpwnam($user) or die "$user not in passwd file";
+
+  chown $uid, $gid, $root;
+
+  opendir(my $dh, "${source}/web") || die;
+  while( my $file = readdir $dh ) {
+    next if $file =~ /^\./;
+    print "Copy ${source}/web/$file/ To $root/\n" if $debug;
+    `rm -rf $root/$file`;
+    `cp -R ${source}/web/$file $root/`;
+  }
+  closedir $dh;
+
+  # Need to create extra folders?
+
+}
+
+sub comp_ver
+{
+  #define('ITOP_VERSION', '$ITOP_VERSION$');
+  #define('ITOP_REVISION', '$WCREV$');
+
+  # read ver from ${source}/web/core/config.class.inc.php
+  my ( $new_ver, $new_rev ) = read_version( "${source}/web/core/config.class.inc.php" );
+
+  # read ver from $root/core/config.class.inc.php
+  my ( $installed_ver, $installed_rev ) = read_version( "${root}/core/config.class.inc.php" );
+
+  # compare and decide
+
+  my $new_versionstr = "$new_ver-$new_rev";
+  my $installed_versionstr = "$installed_ver-$installed_rev";
+  
+  print "new        $new_versionstr  v: $new_ver - r: $new_rev  ${source}/web/core/config.class.inc.php\n" if $debug;
+  print "installed  $installed_versionstr  v: $installed_ver - r: $installed_rev   ${root}/core/config.class.inc.php\n" if $debug;
+  
+  my $install = $new_versionstr gt $installed_versionstr;
+
+  return $install;
+}
+
+sub read_version
+{
+  my $file = shift;
+  my @lines = file_to_array( $file );
+  my $version;
+  my $revision;
+
+  foreach my $line ( @lines ) {
+    if( $line =~  /define\('ITOP_VERSION', '(.+)'\)/ ) {
+      $version = $1;
+    }
+    if( $line =~  /define\('ITOP_REVISION', '(.+)'\)/ ) {
+      $revision = $1;
+    }
+  } 
+  return ( $version, $revision );
+}
+
+sub file_to_array{
+    (my $filename) = @_;
+    open FILE,"$filename" or die $!;
+    my @lines = <FILE>;
+    return @lines;
+}
+

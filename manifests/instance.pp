@@ -10,6 +10,7 @@ define itop::instance (
 
   file { [ $installdir, $docroot ]:
     ensure => directory,
+    mode   => '0755',
   }
 
   exec { "iTop_install_${name}":
@@ -25,10 +26,11 @@ define itop::instance (
   }
 
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production", "${docroot}/log" ]:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0750',
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    mode    => '0750',
+    require => Exec["iTop_install_${name}"],
   }
 
 }

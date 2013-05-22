@@ -11,6 +11,6 @@ class itop (
     install_type => $install_type,
     url          => $url,
   }->
-  class   { 'itop::instance': }->
+  class   { 'itop::instances': }->
   anchor  { 'itop::end': }
 }

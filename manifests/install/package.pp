@@ -3,6 +3,7 @@
 #
 class itop::package(
   $ensure = present,
+  $url = undef,
 )
 {
 

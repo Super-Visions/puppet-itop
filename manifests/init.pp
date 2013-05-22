@@ -1,8 +1,16 @@
 # init file for iTop Class
-class itop ( $ensure = undef )
+class itop ( i
+  $ensure = undef,
+  $install_type = undef,
+  $url = undef,
+)
 {
   anchor  { 'itop::start': }->
-  class   { 'itop::package': ensure => $ensure }->
+  class   { 'itop::install': 
+    ensure       => $ensure,
+    install_type => $install_type,
+    $url         => $url,
+  }->
   class   { 'itop::instance': }->
   anchor  { 'itop::end': }
 }

@@ -1,18 +1,20 @@
 #
 # Class itop::instance
 #
-class itop::instance (
-  $installdir = '/tmp',
-  $docroot    = hiera('itop::docroot', '/var/www/html')
+define itop::instance (
+  $installdir,
+  $docroot,
 ) {
 
-  exec { '/usr/local/itop/bin/install_itop_site': }
+  exec { "iTop_install_${name}":
+    command => "/usr/local/itop/bin/install_itop_site",
+  }
 
-  cron { 'iTop_cron':
+  cron { "iTop_cron_${name}":
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
   }
 
-  file { [ "${installdir}/dl", "${installdir}/Extra-Ext" ]:
+  file { [ "${installdir}/${name}", "${installdir}/${name}/dl", "${installdir}/${name}/Extra-Ext" ]:
     ensure  => directory,
   }
 

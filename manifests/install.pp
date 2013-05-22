@@ -8,7 +8,7 @@ class itop::install (
 )
 {
   class { "itop::install::${install_type}":
-    ensure => $ensure.
+    ensure => $ensure,
     url    => $url,
   }
 }

@@ -13,8 +13,7 @@ class itop::install::zip (
 
   $version = $ensure
 
-  require Package['unzip']
-  require Package['cronie']
+  Package['unzip'] -> Class['itop::install::zip']
 
   # EPEL required for 'php-mcrypt', 'php-domxml-php4-php5'
   package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:

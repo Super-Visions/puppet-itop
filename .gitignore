@@ -1,1 +1,3 @@
+.bundle
 vendor
+*.lock

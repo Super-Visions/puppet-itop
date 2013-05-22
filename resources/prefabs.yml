@@ -1,0 +1,16 @@
+---
+'CentOS-6.4-x86_64-minimal':
+  description: "Vagrant image built with veewee"
+  facts:
+    architecture: x86_64
+    kernel: Linux
+    lsbdistid: CentOS
+    lsbdistrelease: "6.4"
+    lsbmajdistrelease: "6"
+    operatingsystem: CentOS
+    operatingsystemrelease: "6.4"
+    osfamily: RedHat
+  provider_specifics:
+    vagrant:
+      box: 'CentOS-6.4-x86_64-minimal'
+      box_url: 'http://puppet-vagrant-boxes.puppetlabs.com/CentOS-6.4-x86_64-minimal.box'

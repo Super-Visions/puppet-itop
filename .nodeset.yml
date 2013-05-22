@@ -1,0 +1,8 @@
+---
+default_set: 'CentOS-6.4-x86_64-minimal'
+sets:
+  'CentOS-6.4-x86_64-minimal':
+    nodes:
+      'main.vm':
+         prefab: 'CentOS-6.4-x86_64-minimal'
+

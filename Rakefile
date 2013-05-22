@@ -1,6 +1,8 @@
 # Rakefile
 require 'rubygems'
 
+require 'rspec-system/rake_task'
+
 desc "Run puppet-lint."
 task :lint do |t, args|
   begin

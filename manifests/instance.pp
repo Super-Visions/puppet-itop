@@ -27,7 +27,7 @@ define itop::instance (
 
   file { $docroot:
     ensure  => directory,
-    mode    => '0640',
+    mode    => '0644',
     recurse => true,
     require => Exec["iTop_install_${name}"],
   }

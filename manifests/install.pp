@@ -4,7 +4,7 @@
 class itop::install (
   $ensure       = undef,
   $install_type = 'package',
-  $urli         = undef,
+  $url          = undef,
 )
 {
   class { "itop::install::${install_type}":

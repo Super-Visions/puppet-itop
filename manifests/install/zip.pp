@@ -43,7 +43,7 @@ class itop::install::zip (
     checksum  => false,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => "${installdir}",
+    target    => "${installdir}/dl/iTop-${version}",
   }
 
   #file{ "${installdir}/dl/toolkit-2.0.zip":
@@ -57,7 +57,7 @@ class itop::install::zip (
     checksum  => false,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => "${installdir}",
+    target    => "${installdir}/dl/toolkit-2.0",
   }
 
   #exec{ 'unpack iTop2':

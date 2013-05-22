@@ -7,10 +7,10 @@
 #
 define itop::extensions::custom (
   $version,
+  $docroot,
+  $installdir,
   $package    = 'custom-ext',
   $user       = 'apache',
-  $installdir = '/tmp',
-  $docroot    = hiera('itop::docroot', '/var/www/html')
 )
 {
 

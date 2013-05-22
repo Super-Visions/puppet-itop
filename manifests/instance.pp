@@ -11,7 +11,7 @@ define itop::instance (
   }
 
   exec { "iTop_install_${name}":
-    command => "/usr/local/itop/bin/install_itop_site",
+    command => "/usr/local/itop/bin/install_itop_site --root ${docroot}",
   }
 
   cron { "iTop_cron_${name}":

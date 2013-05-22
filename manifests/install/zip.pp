@@ -36,7 +36,7 @@ class itop::install::zip (
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
     target    => "/usr/local/itop",
-    #target    => "${installdir}/dl/iTop-${version}",
+    root_dir  => 'web',
   }
 
   archive { "toolkit-2.0":
@@ -45,7 +45,7 @@ class itop::install::zip (
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
     target    => "/usr/local/itop/web",
-    #target   => "${installdir}/dl/toolkit-2.0",
+    root_dir  => 'toolkit',
     require   => Archive["iTop-${version}"],
   }
 

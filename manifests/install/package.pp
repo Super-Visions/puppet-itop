@@ -1,7 +1,7 @@
 #
 # Class itop::package
 #
-class itop::package(
+class itop::install::package(
   $ensure = present,
   $url = undef,
 )

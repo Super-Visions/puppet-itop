@@ -1,7 +1,7 @@
 #
 # Class itop::install
 #
-class itop::install (
+class itop::install::zip (
   $ensure,
   $url,
   $php_version    = '',

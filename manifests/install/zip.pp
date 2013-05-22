@@ -46,8 +46,9 @@ class itop::install::zip (
     checksum  => false,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => "/usr/local/itop",
-    #target    => "${installdir}/dl/toolkit-2.0",
+    target    => "/usr/local/itop/web",
+    #target   => "${installdir}/dl/toolkit-2.0",
+    require   => Archive["iTop-${version}"],
   }
 
 #  exec{ 'copy iTop2':

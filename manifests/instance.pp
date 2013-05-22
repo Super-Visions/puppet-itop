@@ -6,6 +6,10 @@ define itop::instance (
   $docroot,
 ) {
 
+  file { [ $installdir, $docroot ]:
+    ensure => directory,
+  }
+
   exec { "iTop_install_${name}":
     command => "/usr/local/itop/bin/install_itop_site",
   }

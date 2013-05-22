@@ -1,5 +1,5 @@
 # init file for iTop Class
-class itop ( i
+class itop (
   $ensure = undef,
   $install_type = undef,
   $url = undef,

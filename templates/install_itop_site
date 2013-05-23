@@ -19,7 +19,7 @@ $result = GetOptions (
 );
 
 if( ! -d $root ) {
-  die "Specified root does not exist\n";
+  mkdir $root || die "Cannot create specified root dir : $root\n";
 }
 
 if( ! -d "${source}/web" ) {

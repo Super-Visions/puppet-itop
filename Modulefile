@@ -11,3 +11,4 @@ project_page 'https://github.com/Super-Visions/puppet-itop'
 # dependency 'username/name', '>= 1.2.0'
 
 dependency 'puppetlabs/stdlib', '>= 2.1.0'
+dependency 'smarchive/archive', '>= 0.1.1'

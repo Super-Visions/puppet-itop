@@ -6,16 +6,15 @@
 #                  - Internal structure for the zip is:  web/extensions/<extension directory name>
 #
 define itop::extension (
-  $version,
   $url = hiera('itop::url'),
   $target = '/usr/local/itop/extensions',
 )
 {
-  archive { "${name}-${version}":
+  archive { "${name}":
     ensure    => present,
     checksum  => true,
     extension => 'zip',
-    url       => "${url}/${name}-${version}.zip",
+    url       => "${url}/${name}.zip",
     target    => $target,
   }
 }

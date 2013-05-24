@@ -6,6 +6,7 @@ define itop::instance (
   $docroot,
   $user = 'apache',
   $group = 'apache',
+  $extensions,
 ) {
 
   file { [ $installdir ]:
@@ -20,10 +21,6 @@ define itop::instance (
   cron { "iTop_cron_${name}":
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
   }
-
-  #file { [ "${installdir}/${name}", "${installdir}/${name}/dl", "${installdir}/${name}/Extra-Ext" ]:
-  #  ensure  => directory,
-  #}
 
   file { $docroot:
     ensure  => directory,

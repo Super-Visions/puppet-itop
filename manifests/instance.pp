@@ -6,7 +6,7 @@ define itop::instance (
   $docroot,
   $user = 'apache',
   $group = 'apache',
-  $extensions,
+  $extensions = [],
 ) {
 
   file { [ $installdir ]:

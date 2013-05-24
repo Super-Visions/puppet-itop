@@ -11,4 +11,5 @@ class itop::install (
     ensure => $ensure,
     url    => $url,
   }
+  class { 'itop::extensions': }
 }

@@ -7,7 +7,7 @@
 #
 define itop::extension (
   $version,
-  $url,
+  $url = hiera('itop::url'),
   $target = '/usr/local/itop/extensions',
 )
 {

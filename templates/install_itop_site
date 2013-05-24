@@ -7,15 +7,17 @@ my $root  = '/var/www/html';
 my $user  = 'apache';
 my $group = 'apache';
 my $force;
+my $extensions;
 
 my $source = '/usr/local/itop';
 
 $result = GetOptions (
-  "debug:i" => \$debug,
-  "root=s"  => \$root,
-  "user=s"  => \$user,
-  "group=s" => \$group,
-  "force"   => \$force
+  "debug:i"      => \$debug,
+  "root=s"       => \$root,
+  "user=s"       => \$user,
+  "group=s"      => \$group,
+  "force"        => \$force,
+  "extensions:s" => \$extensions,
 );
 
 if( ! -d $root ) {
@@ -34,6 +36,15 @@ else
   copy() if comp_ver() || $force;
 }
 
+if( $extensions ) {
+  my @extensions = split(',',$extensions);
+
+
+
+}
+
+
+### Subs ###
 sub copy
 {
   my ($login,$pass,$uid,$gid) = getpwnam($user) or die "$user not in passwd file";

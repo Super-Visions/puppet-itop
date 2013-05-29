@@ -1,22 +1,35 @@
 #!/usr/bin/env perl
 
+use strict;
 use Getopt::Long;
+use Data::Dumper;
+
+my $itop_need_update = 0;
+my $ext_need_update = 0;
 
 my $debug = 0;
+my $check = 0;
 my $root  = '/var/www/html';
 my $user  = 'apache';
 my $group = 'apache';
 my $force;
+my $modules;
 my $extensions;
+
+my %modules;
+my %extensions;
 
 my $source = '/usr/local/itop';
 
-$result = GetOptions (
+my $result = GetOptions (
   "debug:i"      => \$debug,
+  "check"        => \$check,
   "root=s"       => \$root,
+  "source=s"     => \$source,
   "user=s"       => \$user,
   "group=s"      => \$group,
   "force"        => \$force,
+  "modules:s"    => \$modules,
   "extensions:s" => \$extensions,
 );
 
@@ -28,24 +41,111 @@ if( ! -d "${source}/web" ) {
   die "iTop install source not found in ${source}/web...\n";
 }
 
+# Check if install / update is needed
 if( ! -d "$root/core" ) {
-  copy();
+  $itop_need_update++;
 }
 else
 {
-  copy() if comp_ver() || $force;
+  if( comp_itop_ver() ) {
+    $itop_need_update++;
+  }
+}
+
+if( $modules ) {
+  %modules = map { $_ => 1 } split(',',$modules);
 }
 
 if( $extensions ) {
   my @extensions = split(',',$extensions);
 
+  if( scalar @extensions ) 
+  {
+    foreach my $ext ( @extensions ) {
+      print "Handling extension :$ext:\n" if $debug;
+      if ( comp_ext_ver( $ext ) ) {
+        $ext_need_update++;
+      }
+    }
+  }
+}
+
+if( $itop_need_update ) {
+  install_itop();
+}
+if( $ext_need_update ) {
+  my @extensions = split(',',$extensions);
+
+  if( scalar @extensions ) 
+  {
+    foreach my $ext ( @extensions ) {
+      print "Installing extension :$ext:\n" if $debug;
+      if ( comp_ext_ver( $ext ) ) {
+        install_ext( $ext );
+      }
+    }
+  }
+}
+
+if( ! $check && ( $itop_need_update || $ext_need_update ) ) {
+
+  run_itop_setup();
+
+}
+
+my $exit = $check ? ( $itop_need_update + $ext_need_update ) > 0 : 0;
+exit $exit;
+
+### Subs ###
+sub file_to_array{
+    (my $filename) = @_;
+    open FILE,"$filename" or print "Cannot open $filename : $!\n";
+    my @lines = <FILE>;
+    return @lines;
+}
+
+sub run_cmd
+{
+  my $cmd = shift;
+
+  use IPC::Open3;
+
+  print "$cmd\n" if $debug >= 2;
+
+  my $pid = open3(\*WRITE, \*READ, \*ERROR, $cmd );
+  waitpid( $pid, 0 );
+  my $child_exit_status = $? >> 8;
+  
+  my @return = <READ>;
+  my $return = join "", @return;
+
+  my @error = <ERROR>;
+  my $error = join "", @error;
+
+  return ( $child_exit_status, \@return, \@error );  
+}
+
+## iTop ##
+
+sub run_itop_setup
+{
+  create_setup_xml();
+  run_setup();
+}
+
+sub create_setup_xml
+{
 
 
 }
 
+sub run_setup
+{
+  my $command = "php ${root}/toolkit/unattended-install.php --response_file=<path to the XML response file> --install=1";
+  #my ( $child_exit_status, $status, $error ) = run_cmd( $command );
+}
 
-### Subs ###
-sub copy
+sub install_itop
 {
   my ($login,$pass,$uid,$gid) = getpwnam($user) or die "$user not in passwd file";
 
@@ -54,26 +154,25 @@ sub copy
   opendir(my $dh, "${source}/web") || die;
   while( my $file = readdir $dh ) {
     next if $file =~ /^\./;
+    # extensions are handled elsewhere
+    next if $file =~ /^extensions/;
     print "Copy ${source}/web/$file/ To $root/\n" if $debug;
     `rm -rf $root/$file`;
     `cp -R ${source}/web/$file $root/`;
   }
   closedir $dh;
-
-  # Need to create extra folders?
-
 }
 
-sub comp_ver
+sub comp_itop_ver
 {
   #define('ITOP_VERSION', '$ITOP_VERSION$');
   #define('ITOP_REVISION', '$WCREV$');
 
   # read ver from ${source}/web/core/config.class.inc.php
-  my ( $new_ver, $new_rev ) = read_version( "${source}/web/core/config.class.inc.php" );
+  my ( $new_ver, $new_rev ) = read_itop_version( "${source}/web/core/config.class.inc.php" );
 
   # read ver from $root/core/config.class.inc.php
-  my ( $installed_ver, $installed_rev ) = read_version( "${root}/core/config.class.inc.php" );
+  my ( $installed_ver, $installed_rev ) = read_itop_version( "${root}/core/config.class.inc.php" );
 
   # compare and decide
 
@@ -81,14 +180,14 @@ sub comp_ver
   my $installed_versionstr = "$installed_ver-$installed_rev";
   
   print "new        $new_versionstr  v: $new_ver - r: $new_rev  ${source}/web/core/config.class.inc.php\n" if $debug;
-  print "installed  $installed_versionstr  v: $installed_ver - r: $installed_rev   ${root}/core/config.class.inc.php\n" if $debug;
+  print "installed  $installed_versionstr  v: $installed_ver - r: $installed_rev  ${root}/core/config.class.inc.php\n" if $debug;
   
   my $install = $new_versionstr gt $installed_versionstr;
 
   return $install;
 }
 
-sub read_version
+sub read_itop_version
 {
   my $file = shift;
   my @lines = file_to_array( $file );
@@ -106,10 +205,85 @@ sub read_version
   return ( $version, $revision );
 }
 
-sub file_to_array{
-    (my $filename) = @_;
-    open FILE,"$filename" or die $!;
-    my @lines = <FILE>;
-    return @lines;
+## extensions ##
+
+sub list_extension_dirs
+{
+  my $name = shift;
+  my @extensions;
+  
+  my $dir = "${source}/extensions/${name}/web/extensions";
+  opendir(my $dh, $dir) || die "can't opendir $dir : $!";
+
+  #print "------ opening dir :$dir:\n";
+
+  while( my $i = readdir $dh) {
+    if( $i =~ /^\./ ) { next }
+    if( ! -e "${dir}/$i/module.$i.php" ) {
+      next;
+    }
+    push( @extensions, $i );
+    $extensions{$i} = 1;
+  }
+  closedir $dh;
+  @extensions;
 }
+
+sub install_ext
+{
+  my $name = shift;
+  my @extensions = list_extension_dirs( $name );
+
+  # TODO Installation
+  print Dumper( \@extensions );
+
+  my $dir = "${source}/extensions/${name}/web/extensions";
+  foreach my $ext ( @extensions ) {
+    my $src_dir = "${dir}/$ext";
+    my $dst_dir = "${root}/extensions/${ext}";
+    `rm -rf ${dst_dir}`;
+    `cp -R ${src_dir} ${dst_dir}`;
+  }
+}
+
+sub comp_ext_ver
+{
+  my $name = shift;
+  my @extensions = list_extension_dirs( $name );
+  
+  my $install = 0;
+
+  my $dir = "${source}/extensions/${name}/web/extensions";
+
+  foreach my $ext ( @extensions ) {
+    my ( $new_ver ) = read_ext_version( $dir, $ext );
+
+    my ( $installed_ver ) = read_ext_version( "${root}/extensions", $ext );
+
+    # compare and decide
+    print "new ext        $new_ver  ${dir}/${ext}/module.${ext}.php\n" if $debug;
+    print "installed ext  $installed_ver   ${root}/extensions/${ext}/module.${ext}.php\n" if $debug;
+    
+    $install++ if $new_ver gt $installed_ver;
+  }
+
+  return $install;
+}
+
+sub read_ext_version
+{
+  my $dir = shift;
+  my $name = shift;
+
+  print "Reading version from :${dir}/${name}/module.${name}.php:\n" if $debug;
+
+  my @lines = file_to_array("${dir}/${name}/module.${name}.php");
+  foreach my $line ( @lines ) {
+    if( $line =~  /^\s+'$name\/(.+)'/ ) {
+      return $1;
+    }
+  }
+  return 0;
+}
+
 

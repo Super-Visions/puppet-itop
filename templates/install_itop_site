@@ -233,6 +233,8 @@ sub install_ext
 {
   my $name = shift;
   my @extensions = list_extension_dirs( $name );
+  
+  #my ($login,$pass,$uid,$gid) = getpwnam($user) or die "$user not in passwd file";
 
   # TODO Installation
   print Dumper( \@extensions );
@@ -243,6 +245,8 @@ sub install_ext
     my $dst_dir = "${root}/extensions/${ext}";
     `rm -rf ${dst_dir}`;
     `cp -R ${src_dir} ${dst_dir}`;
+    `find ${dst_dir} -type d -exec chmod 0755 '{}' ';'`;
+    `find ${dst_dir} -type f -exec chmod 0644 '{}' ';'`;
   }
 }
 

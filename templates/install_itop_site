@@ -162,8 +162,8 @@ sub install_itop
   }
   closedir $dh;
 
-  find $root -type f -exec chmod 644 '{}' ';'
-  find $root -type d -exec chmod 755 '{}' ';'
+  `find $root -type f -exec chmod 644 '{}' ';'`;
+  `find $root -type d -exec chmod 755 '{}' ';'`;
 }
 
 sub comp_itop_ver

@@ -9,7 +9,7 @@ class itop::extensions (
   $extension_hash = hiera('itop::extension_hash', {}) 
 )
 {
-  Class['itop::install'] -> Class['itop::extensions']
+  #Class['itop::install'] -> Class['itop::extensions']
 
   validate_hash($extension_hash)
   if( $extension_hash )

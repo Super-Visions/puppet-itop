@@ -36,12 +36,12 @@ define itop::instance (
     require => Exec["iTop_install_${name}"],
   }
 
-  file { $docroot:
-    ensure  => directory,
-    mode    => '0644',
-    recurse => true,
-    require => Exec["iTop_install_${name}"],
-  }
+  #file { $docroot:
+    #ensure  => directory,
+    #mode    => '0644',
+    #recurse => true,
+    #require => Exec["iTop_install_${name}"],
+  #}
 
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production", "${docroot}/extensions", "${docroot}/log" ]:
     ensure  => directory,

@@ -179,13 +179,22 @@ sub comp_itop_ver
 
   # compare and decide
 
-  my $new_versionstr = "$new_ver-$new_rev";
-  my $installed_versionstr = "$installed_ver-$installed_rev";
+  my $new_versionstr = "$new_ver.$new_rev";
+  my $installed_versionstr = "$installed_ver.$installed_rev";
   
   print "new        $new_versionstr  v: $new_ver - r: $new_rev  ${source}/web/core/config.class.inc.php\n" if $debug;
   print "installed  $installed_versionstr  v: $installed_ver - r: $installed_rev  ${root}/core/config.class.inc.php\n" if $debug;
-  
-  my $install = $new_versionstr gt $installed_versionstr;
+
+  my @versions = ( $installed_versionstr, $new_versionstr );
+
+  my @sorted = map {$_->[0]}
+               sort {$a->[1] cmp $b->[1]}
+               map {[$_, pack "U*", split /\./]} @versions;
+  print join("\n", @sorted), "\n";
+
+  my $install =  $sorted[1] ne $installed_versionstr;
+
+  print "Install : $install\n" if $debug;  
 
   return $install;
 }
@@ -270,8 +279,17 @@ sub comp_ext_ver
     # compare and decide
     print "new ext        $new_ver  ${dir}/${ext}/module.${ext}.php\n" if $debug;
     print "installed ext  $installed_ver   ${root}/extensions/${ext}/module.${ext}.php\n" if $debug;
-    
-    $install++ if $new_ver gt $installed_ver;
+
+    my @versions = ( $installed_ver, $new_ver );
+
+    my @sorted = map {$_->[0]}
+                 sort {$a->[1] cmp $b->[1]}
+                 map {[$_, pack "U*", split /\./]} @versions;
+    print join("\n", @sorted), "\n";
+
+    $install++ if $sorted[1] ne $installed_ver;
+
+    print "Install : $install\n" if $debug;
   }
 
   return $install;

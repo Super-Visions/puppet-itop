@@ -14,12 +14,13 @@ class itop::install::zip (
   Package['unzip'] -> Class['itop::install::zip']
 
   # EPEL required for 'php-mcrypt', 'php-domxml-php4-php5'
-  package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
-    ensure => installed,
-  }
-  package{ [ 'php-domxml-php4-php5' ]:
-    ensure => installed,
-  }
+#  package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
+#    ensure => installed,
+#  }
+#  package{ [ 'php-domxml-php4-php5' ]:
+#    ensure => installed,
+#  }
+
   # Not available on EPEL EL 5
   #package{ [ "php-mcrypt" ]:
   #  ensure => installed,

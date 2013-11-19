@@ -2,14 +2,16 @@
 # Class itop::install
 #
 class itop::install::zip (
-  $ensure,
-  $url,
+  $ensure         = undef,
+  $url            = undef,
+  $base_src_dir   = undef,
   $php_version    = '',
   #$user           = 'apache',
   #$installdir     = '/var/www',
 )
 {
   $version = $ensure
+  $srcdir = "${base_src_dir}/${version}"
 
   Package['unzip'] -> Class['itop::install::zip']
 
@@ -36,7 +38,7 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => '/usr/local/itop',
+    target    => "${srcdir}",
     root_dir  => 'web'
   }
 
@@ -45,33 +47,33 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => '/usr/local/itop/web',
+    target    => "${srcdir}/web",
     root_dir  => 'toolkit',
     require   => Archive["iTop-${version}"]
   }
 
-  file { '/usr/local/itop/bin':
+  file { "${base_src_dir}/bin":
     ensure    => directory,
     require   => Archive["iTop-${version}"]
   }
-  file { '/usr/local/itop/bin/install_itop_site':
+  file { "${base_src_dir}/bin/install_itop_site":
     ensure  => present,
     content => template('itop/install_itop_site'),
     mode    => '0750',
-    require => File['/usr/local/itop/bin']
+    require => File["${base_src_dir}/bin"]
   }
 
-  file { '/usr/local/itop/web/toolkit/ajax.toolkit.php':
+  file { "${srcdir}/web/toolkit/ajax.toolkit.php":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']
   }
-  file { '/usr/local/itop/web/toolkit/index.php':
+  file { "${srcdir}/web/toolkit/index.php":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']
   }
-  file { '/usr/local/itop/web/toolkit/toolkit.css':
+  file { "${srcdir}/web/toolkit/toolkit.css":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']

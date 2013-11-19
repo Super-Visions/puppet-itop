@@ -36,23 +36,23 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => "/usr/local/itop",
-    root_dir  => 'web',
+    target    => '/usr/local/itop',
+    root_dir  => 'web'
   }
 
-  archive { "toolkit-2.0":
+  archive { 'toolkit-2.0':
     ensure    => present,
     checksum  => true,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => "/usr/local/itop/web",
+    target    => '/usr/local/itop/web',
     root_dir  => 'toolkit',
-    require   => Archive["iTop-${version}"],
+    require   => Archive["iTop-${version}"]
   }
 
   file { '/usr/local/itop/bin':
-    ensure => directory,
-    require   => Archive["iTop-${version}"],
+    ensure    => directory,
+    require   => Archive["iTop-${version}"]
   }
   file { '/usr/local/itop/bin/install_itop_site':
     ensure  => present,
@@ -60,4 +60,5 @@ class itop::install::zip (
     mode    => '0750',
     require => File['/usr/local/itop/bin']
   }
+
 }

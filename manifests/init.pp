@@ -6,7 +6,7 @@ class itop (
 )
 {
   anchor  { 'itop::start': }->
-  class   { 'itop::install': 
+  class   { 'itop::install':
     ensure       => $ensure,
     install_type => $install_type,
     url          => $url,

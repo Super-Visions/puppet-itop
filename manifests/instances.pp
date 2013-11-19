@@ -2,7 +2,7 @@
 # Doc
 #
 class itop::instances (
-  $instance_hash = hiera('itop::instance_hash', {}) 
+  $instance_hash = hiera('itop::instance_hash', {})
 )
 {
   Class['itop::install'] -> Class['itop::instances']

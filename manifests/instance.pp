@@ -21,8 +21,8 @@ define itop::instance (
   $ext_str = join($extensions, ',')
 
   exec { "iTop_install_${name}":
-    command => "/usr/local/itop/bin/install_itop_site --root ${docroot} --user ${user} --group ${group} --extensions $ext_str",
-    unless  => "/usr/local/itop/bin/install_itop_site --check --root ${docroot} --user ${user} --group ${group} --extensions $ext_str",
+    command => "/usr/local/itop/bin/install_itop_site --root ${docroot} --user ${user} --group ${group} --extensions ${ext_str}",
+    unless  => "/usr/local/itop/bin/install_itop_site --check --root ${docroot} --user ${user} --group ${group} --extensions ${ext_str}",
   }
 
   cron { "iTop_cron_${name}":

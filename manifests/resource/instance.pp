@@ -4,13 +4,14 @@
 define itop::resource::instance (
   $installdir,
   $docroot,
-  $user = 'apache',
-  $group = 'apache',
-  $extensions = [],
-  $database = undef,
-  $url = undef,
-  $admin_account = undef,
-  $modules = undef,
+  $user           = 'apache',
+  $group          = 'apache',
+  $extensions     = [],
+  $database       = undef,
+  $url            = undef,
+  $admin_account  = undef,
+  $modules        = undef,
+  $src_dir        = $itop::params::itop_src_dir,
 ) {
 
   file { [ $installdir ]:
@@ -21,8 +22,8 @@ define itop::resource::instance (
   $ext_str = join($extensions, ',')
 
   exec { "iTop_install_${name}":
-    command => "/usr/local/itop/bin/install_itop_site --root ${docroot} --user ${user} --group ${group} --extensions ${ext_str}",
-    unless  => "/usr/local/itop/bin/install_itop_site --check --root ${docroot} --user ${user} --group ${group} --extensions ${ext_str}",
+    command => "/usr/local/itop/bin/install_itop_site --root ${docroot} --source ${src_dir} --user ${user} --group ${group} --extensions ${ext_str}",
+    unless  => "/usr/local/itop/bin/install_itop_site --check --root ${docroot} --source ${src_dir} --user ${user} --group ${group} --extensions ${ext_str}",
   }
 
   cron { "iTop_cron_${name}":

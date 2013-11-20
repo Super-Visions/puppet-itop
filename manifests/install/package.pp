@@ -3,7 +3,7 @@
 #
 class itop::install::package(
   $version  = present,
-  $url      = itop::params::itop_url,
+  $url      = $itop::params::itop_url,
 ) inherits itop::params {
 
   #package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:

@@ -2,7 +2,7 @@
 # Class itop::install
 #
 class itop::install (
-  $ensure         = undef,
+  $version        = undef,
   $base_src_dir   = undef,
   $install_type   = 'zip',
   $url            = undef,
@@ -11,7 +11,7 @@ class itop::install (
 {
   anchor  { 'itop::install::start': }->
   class { "itop::install::${install_type}":
-    ensure       => $ensure,
+    version      => $version,
     url          => $url,
     base_src_dir => $base_src_dir,
   }->

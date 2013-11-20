@@ -2,7 +2,7 @@
 # Class itop::package
 #
 class itop::install::package(
-  $ensure = present,
+  $version = present,
   $url = undef,
 )
 {
@@ -20,10 +20,10 @@ class itop::install::package(
     ensure => installed,
   }
 
-  $source = "/downloads/iTop-${ensure}.noarch.rpm"
+  $source = "/downloads/iTop-${version}.noarch.rpm"
 
   package { 'iTop':
-    ensure   => $ensure,
+    ensure   => $version,
     source   => $source,
     provider => 'rpm',
   }

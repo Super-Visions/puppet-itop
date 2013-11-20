@@ -2,7 +2,7 @@
 # Class itop::install
 #
 class itop::install::zip (
-  $ensure         = undef,
+  $version        = undef,
   $url            = undef,
   $base_src_dir   = undef,
   $php_version    = '',
@@ -10,7 +10,6 @@ class itop::install::zip (
   #$installdir     = '/var/www',
 )
 {
-  $version = $ensure
   $srcdir = "${base_src_dir}/${version}"
 
   Package['unzip'] -> Class['itop::install::zip']
@@ -38,7 +37,7 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => "${srcdir}",
+    target    => $srcdir,
     root_dir  => 'web'
   }
 
@@ -78,7 +77,5 @@ class itop::install::zip (
     mode    => '0644',
     require => Archive['toolkit-2.0']
   }
-
-
 
 }

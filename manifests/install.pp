@@ -19,4 +19,5 @@ class itop::install (
     extension_hash => $extension_hash
   }->
   anchor  { 'itop::install::end': }
+
 }

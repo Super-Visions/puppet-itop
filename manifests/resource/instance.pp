@@ -45,7 +45,8 @@ define itop::resource::instance (
     #require => Exec["iTop_install_${name}"],
   #}
 
-  file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production", "${docroot}/extensions", "${docroot}/log" ]:
+  file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production",
+            "${docroot}/extensions", "${docroot}/log" ]:
     ensure  => directory,
     owner   => $user,
     group   => $group,

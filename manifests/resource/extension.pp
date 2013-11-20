@@ -5,12 +5,12 @@
 #  Requirements:   - Source file must be a zip file
 #                  - Internal structure for the zip is:  web/extensions/<extension directory name>
 #
-define itop::extension (
+define itop::resource::extension (
   $url = hiera('itop::url'),
   $target = '/usr/local/itop/extensions',
 )
 {
-  archive { "${name}":
+  archive { $name:
     ensure    => present,
     checksum  => true,
     extension => 'zip',

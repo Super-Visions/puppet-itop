@@ -1,7 +1,7 @@
 #
-# Class itop::instance
+# Class itop::resource::instance
 #
-define itop::instance (
+define itop::resource::instance (
   $installdir,
   $docroot,
   $user = 'apache',

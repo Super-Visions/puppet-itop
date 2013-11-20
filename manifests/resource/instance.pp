@@ -24,6 +24,7 @@ define itop::resource::instance (
   exec { "iTop_install_${name}":
     command => "/usr/local/itop/bin/install_itop_site --root ${docroot} --source ${src_dir} --user ${user} --group ${group} --extensions ${ext_str}",
     unless  => "/usr/local/itop/bin/install_itop_site --check --root ${docroot} --source ${src_dir} --user ${user} --group ${group} --extensions ${ext_str}",
+    require => File["${docroot}/extensions"],
   }
 
   cron { "iTop_cron_${name}":
@@ -49,7 +50,7 @@ define itop::resource::instance (
     owner   => $user,
     group   => $group,
     mode    => '0750',
-    require => Exec["iTop_install_${name}"],
+    require => File[$installdir],
   }
 
 }

@@ -6,8 +6,8 @@
 #                  - Internal structure for the zip is:  web/extensions/<extension directory name>
 #
 define itop::resource::extension (
-  $url = hiera('itop::url'),
-  $target = '/usr/local/itop/extensions',
+  $url    = hiera('itop::params::itop_url'),
+  $target = hiera('itop::params::itop_ext_dir'),
 )
 {
   archive { $name:

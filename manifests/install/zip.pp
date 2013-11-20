@@ -2,15 +2,15 @@
 # Class itop::install
 #
 class itop::install::zip (
-  $version        = undef,
-  $url            = undef,
-  $base_src_dir   = undef,
-  $php_version    = '',
-  #$user           = 'apache',
-  #$installdir     = '/var/www',
-)
-{
-  $srcdir = "${base_src_dir}/${version}"
+  $version        = itop::params::itop_version,
+  $url            = itop::params::itop_url,
+  $base_src_dir   = itop::params::itop_base_src_dir,
+  $src_dir        = itop::params::itop_src_dir,
+  $bin_dir        = itop::params::itop_bin_dir,
+  $php_version    = ''
+) inherits itop::params {
+
+#  $srcdir = "${base_src_dir}/${version}"
 
   Package['unzip'] -> Class['itop::install::zip']
 
@@ -37,7 +37,7 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/iTop-${version}.zip",
-    target    => $srcdir,
+    target    => $src_dir,
     root_dir  => 'web'
   }
 
@@ -46,33 +46,33 @@ class itop::install::zip (
     checksum  => true,
     extension => 'zip',
     url       => "${url}/toolkit-2.0.zip",
-    target    => "${srcdir}/web",
+    target    => "${src_dir}/web",
     root_dir  => 'toolkit',
     require   => Archive["iTop-${version}"]
   }
 
-  file { "${base_src_dir}/bin":
+  file { $bin_dir:
     ensure    => directory,
     require   => Archive["iTop-${version}"]
   }
-  file { "${base_src_dir}/bin/install_itop_site":
+  file { "${bin_dir}/install_itop_site":
     ensure  => present,
     content => template('itop/install_itop_site'),
     mode    => '0750',
-    require => File["${base_src_dir}/bin"]
+    require => File[$bin_dir]
   }
 
-  file { "${srcdir}/web/toolkit/ajax.toolkit.php":
+  file { "${src_dir}/web/toolkit/ajax.toolkit.php":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']
   }
-  file { "${srcdir}/web/toolkit/index.php":
+  file { "${src_dir}/web/toolkit/index.php":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']
   }
-  file { "${srcdir}/web/toolkit/toolkit.css":
+  file { "${src_dir}/web/toolkit/toolkit.css":
     ensure  => file,
     mode    => '0644',
     require => Archive['toolkit-2.0']

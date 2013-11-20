@@ -2,10 +2,9 @@
 # Class itop::package
 #
 class itop::install::package(
-  $version = present,
-  $url = undef,
-)
-{
+  $version  = present,
+  $url      = itop::params::itop_url,
+) inherits itop::params {
 
   #package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
   package{ [ 'php-mysql', 'php-soap', 'php-ldap'  ]:

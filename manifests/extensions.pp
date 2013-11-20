@@ -15,6 +15,6 @@ class itop::extensions (
   validate_hash($extension_hash)
   if( $extension_hash )
   {
-    create_resources( 'itop::extension', $extension_hash )
+    create_resources( 'itop::resource::extension', $extension_hash )
   }
 }

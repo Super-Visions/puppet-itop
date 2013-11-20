@@ -2,6 +2,8 @@
 # Doc
 #
 class itop::instances (
+  $version        = undef,
+  $base_src_dir   = undef,
   $instance_hash = hiera('itop::instance_hash', {})
 )
 {
@@ -10,6 +12,6 @@ class itop::instances (
   validate_hash($instance_hash)
   if( $instance_hash )
   {
-    create_resources( 'itop::instance', $instance_hash )
+    create_resources( 'itop::resource::instance', $instance_hash )
   }
 }

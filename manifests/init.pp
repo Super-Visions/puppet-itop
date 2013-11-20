@@ -13,6 +13,9 @@ class itop (
     url          => $url,
     base_src_dir => $base_src_dir,
   }->
-  class   { 'itop::instances': }->
+  class   { 'itop::instances':
+    version      => $version,
+    base_src_dir => $base_src_dir,
+  }->
   anchor  { 'itop::end': }
 }

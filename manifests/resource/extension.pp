@@ -3,7 +3,8 @@
 #  Valid for own created extenstions and TeemIP.
 #
 #  Requirements:   - Source file must be a zip file
-#                  - Internal structure for the zip is:  web/extensions/<extension directory name>
+#                  - Internal structure for the zip is:
+#                            web/extensions/<extension directory name>
 #
 define itop::resource::extension (
   $url    = hiera('itop::params::itop_url'),

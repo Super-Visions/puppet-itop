@@ -3,14 +3,15 @@
 #  Valid for own created extenstions and TeemIP.
 #
 #  Requirements:   - Source file must be a zip file
-#                  - Internal structure for the zip is:  web/extensions/<extension directory name>
+#                  - Internal structure for the zip is:
+#                            web/extensions/<extension directory name>
 #
-define itop::extension (
-  $url = hiera('itop::url'),
-  $target = '/usr/local/itop/extensions',
+define itop::resource::extension (
+  $url    = hiera('itop::params::itop_url'),
+  $target = $itop::params::itop_ext_dir,
 )
 {
-  archive { "${name}":
+  archive { $name:
     ensure    => present,
     checksum  => true,
     extension => 'zip',

@@ -59,7 +59,7 @@ if( $modules ) {
 if( $extensions ) {
   my @extensions = split(',',$extensions);
 
-  if( scalar @extensions ) 
+  if( scalar @extensions )
   {
     foreach my $ext ( @extensions ) {
       print "Handling extension :$ext:\n" if $debug;
@@ -76,7 +76,7 @@ if( $itop_need_update ) {
 if( $ext_need_update ) {
   my @extensions = split(',',$extensions);
 
-  if( scalar @extensions ) 
+  if( scalar @extensions )
   {
     foreach my $ext ( @extensions ) {
       print "Installing extension :$ext:\n" if $debug;
@@ -112,17 +112,18 @@ sub run_cmd
 
   print "$cmd\n" if $debug >= 2;
 
-  my $pid = open3(\*WRITE, \*READ, \*ERROR, $cmd );
+  #my $pid = open3(\*WRITE, \*READ, \*ERROR, $cmd );
+  my $pid = open3(\*READ, \*ERROR, $cmd );
   waitpid( $pid, 0 );
   my $child_exit_status = $? >> 8;
-  
+
   my @return = <READ>;
   my $return = join "", @return;
 
   my @error = <ERROR>;
   my $error = join "", @error;
 
-  return ( $child_exit_status, \@return, \@error );  
+  return ( $child_exit_status, \@return, \@error );
 }
 
 ## iTop ##
@@ -181,7 +182,7 @@ sub comp_itop_ver
 
   my $new_versionstr = "$new_ver.$new_rev";
   my $installed_versionstr = "$installed_ver.$installed_rev";
-  
+
   print "new        $new_versionstr  v: $new_ver - r: $new_rev  ${source}/web/core/config.class.inc.php\n" if $debug;
   print "installed  $installed_versionstr  v: $installed_ver - r: $installed_rev  ${root}/core/config.class.inc.php\n" if $debug;
 
@@ -194,7 +195,7 @@ sub comp_itop_ver
 
   my $install =  $sorted[1] ne $installed_versionstr;
 
-  print "Install : $install\n" if $debug;  
+  print "Install : $install\n" if $debug;
 
   return $install;
 }
@@ -213,7 +214,7 @@ sub read_itop_version
     if( $line =~  /define\('ITOP_REVISION', '(.+)'\)/ ) {
       $revision = $1;
     }
-  } 
+  }
   return ( $version, $revision );
 }
 
@@ -223,7 +224,7 @@ sub list_extension_dirs
 {
   my $name = shift;
   my @extensions;
-  
+
   my $dir = "${source}/extensions/${name}/web/extensions";
   opendir(my $dh, $dir) || die "can't opendir $dir : $!";
 
@@ -245,7 +246,7 @@ sub install_ext
 {
   my $name = shift;
   my @extensions = list_extension_dirs( $name );
-  
+
   #my ($login,$pass,$uid,$gid) = getpwnam($user) or die "$user not in passwd file";
 
   # TODO Installation
@@ -266,7 +267,7 @@ sub comp_ext_ver
 {
   my $name = shift;
   my @extensions = list_extension_dirs( $name );
-  
+
   my $install = 0;
 
   my $dir = "${source}/extensions/${name}/web/extensions";

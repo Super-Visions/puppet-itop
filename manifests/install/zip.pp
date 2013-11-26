@@ -15,7 +15,8 @@ class itop::install::zip (
   Package['unzip'] -> Class['itop::install::zip']
 
   # EPEL required for 'php-mcrypt', 'php-domxml-php4-php5'
-#  package{ [ "php${php_version}-mysql", "php${php_version}-soap", "php${php_version}-ldap"  ]:
+#  package{ [ "php${php_version}-mysql", "php${php_version}-soap",
+#              "php${php_version}-ldap"  ]:
 #    ensure => installed,
 #  }
 #  package{ [ 'php-domxml-php4-php5' ]:
@@ -27,7 +28,8 @@ class itop::install::zip (
   #  ensure => installed,
   #}
 
-  #file { [ "${installdir}/dl","${installdir}/session", "${installdir}/itop-${version}" ]:
+  #file { [ "${installdir}/dl","${installdir}/session",
+  #          "${installdir}/itop-${version}" ]:
   #  ensure  => directory,
   #  owner   => $user,
   #}

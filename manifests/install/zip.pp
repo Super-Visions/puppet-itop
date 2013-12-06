@@ -7,7 +7,7 @@ class itop::install::zip (
   $base_src_dir   = $itop::params::itop_base_src_dir,
   $src_dir        = $itop::params::itop_src_dir,
   $bin_dir        = $itop::params::itop_bin_dir,
-  $src_target     = '/usr/local/src',
+  $zip_target     = $itop::params::itop_zip_dir,
   $php_version    = ''
 ) inherits itop::params {
 
@@ -36,22 +36,24 @@ class itop::install::zip (
   #}
 
   archive { "iTop-${version}":
-    ensure    => present,
-    checksum  => true,
-    extension => 'zip',
-    url       => "${url}/iTop-${version}.zip",
-    target    => $src_dir,
-    root_dir  => 'web'
+    ensure     => present,
+    checksum   => true,
+    extension  => 'zip',
+    url        => "${url}/iTop-${version}.zip",
+    target     => $src_dir,
+    src_target => $zip_target,
+    root_dir   => 'web'
   }
 
   archive { 'toolkit-2.0':
-    ensure    => present,
-    checksum  => true,
-    extension => 'zip',
-    url       => "${url}/toolkit-2.0.zip",
-    target    => "${src_dir}/web",
-    root_dir  => 'toolkit',
-    require   => Archive["iTop-${version}"]
+    ensure     => present,
+    checksum   => true,
+    extension  => 'zip',
+    url        => "${url}/toolkit-2.0.zip",
+    target     => "${src_dir}/web",
+    src_target => $zip_target,
+    root_dir   => 'toolkit',
+    require    => Archive["iTop-${version}"]
   }
 
   file { $bin_dir:

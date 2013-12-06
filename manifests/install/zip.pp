@@ -7,6 +7,7 @@ class itop::install::zip (
   $base_src_dir   = $itop::params::itop_base_src_dir,
   $src_dir        = $itop::params::itop_src_dir,
   $bin_dir        = $itop::params::itop_bin_dir,
+  $src_target     = '/usr/local/src',
   $php_version    = ''
 ) inherits itop::params {
 

@@ -28,7 +28,7 @@ define itop::resource::instance (
   }
 
   cron { "iTop_cron_${name}":
-    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
+    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
   }
 
   file { "${docroot}/toolkit/unattended-install.php":

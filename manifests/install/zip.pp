@@ -35,8 +35,13 @@ class itop::install::zip (
   #  owner   => $user,
   #}
 
+  file { $base_src_dir:
+    ensure => directory,
+  }
+  
   file { $src_dir:
     ensure => directory,
+    require => File[$base_src_dir],
   }
 
   file { $zip_target:

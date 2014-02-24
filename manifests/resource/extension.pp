@@ -9,7 +9,7 @@
 define itop::resource::extension (
   $url        = hiera('itop::params::itop_url'),
   $target     = $itop::params::itop_ext_dir,
-  $zip_target = $itop::params::itop_ext_zip_dir,
+  $zip_target = $itop::params::itop_zip_dir,
 )
 {
   archive { $name:

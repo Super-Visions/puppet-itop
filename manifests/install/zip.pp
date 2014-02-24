@@ -8,7 +8,6 @@ class itop::install::zip (
   $src_dir        = $itop::params::itop_src_dir,
   $bin_dir        = $itop::params::itop_bin_dir,
   $zip_target     = $itop::params::itop_zip_dir,
-  $ext_zip_target = $itop::params::itop_ext_zip_dir,
   $php_version    = ''
 ) inherits itop::params {
 
@@ -84,12 +83,6 @@ class itop::install::zip (
     mode    => '0750',
     require => File[$bin_dir],
   }
-
-  file { $ext_zip_target:
-    ensure  => directory,
-    require => Archive["iTop-${version}"],
-  }
-
 
 #  file { "${src_dir}/web/toolkit/ajax.toolkit.php":
 #    ensure  => file,

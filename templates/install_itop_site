@@ -152,6 +152,7 @@ sub install_itop
 
   chown $uid, $gid, $root;
 
+  # iTop Base system install
   opendir(my $dh, "${source}/web") || die;
   while( my $file = readdir $dh ) {
     next if $file =~ /^\./;
@@ -162,6 +163,17 @@ sub install_itop
     `cp -R ${source}/web/$file $root/`;
   }
   closedir $dh;
+
+  # iTop Toolkit install
+  opendir(my $dh2, "${source}/toolkit") || die;
+  while( my $file = readdir $dh2 ) {
+    next if $file =~ /^\./;
+    print "Copy ${source}/toolkit/$file/ To $root/\n" if $debug;
+    `rm -rf $root/$file`;
+    `cp -R ${source}/toolkit/$file $root/`;
+  }
+  closedir $dh2;
+
 
   `find $root -type f -exec chmod 644 '{}' ';'`;
   `find $root -type d -exec chmod 755 '{}' ';'`;

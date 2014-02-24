@@ -13,7 +13,7 @@ class itop::install::zip (
 
 #  $srcdir = "${base_src_dir}/${version}"
 
-  Package['unzip'] -> Class['itop::install::zip']
+#  Package['unzip'] -> Class['itop::install::zip']
 
   # EPEL required for 'php-mcrypt', 'php-domxml-php4-php5'
 #  package{ [ "php${php_version}-mysql", "php${php_version}-soap",

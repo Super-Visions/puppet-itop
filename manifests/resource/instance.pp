@@ -17,6 +17,7 @@ define itop::resource::instance (
   file { [ $installdir ]:
     ensure => directory,
     mode   => '0755',
+    recurse => true,
   }
 
   $ext_str = join($extensions, ',')
@@ -28,7 +29,7 @@ define itop::resource::instance (
   }
 
   cron { "iTop_cron_${name}":
-    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params",
+    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
   }
 
   file { "${docroot}/toolkit/unattended-install.php":
@@ -52,6 +53,7 @@ define itop::resource::instance (
     group   => $group,
     mode    => '0750',
     require => File[$installdir],
+    recurse => true,
   }
 
 }

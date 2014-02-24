@@ -63,7 +63,7 @@ class itop::install::zip (
     url        => "${url}/toolkit-2.0.zip",
     target     => $src_dir,
     src_target => $zip_target,
-    root_dir   => 'web',
+    root_dir   => 'toolkit',
     require    => Archive["iTop-${version}"],
   }
 

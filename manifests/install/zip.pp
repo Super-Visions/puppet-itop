@@ -35,13 +35,13 @@ class itop::install::zip (
   #  owner   => $user,
   #}
 
-  file { $src_dir:
+  file { $base_src_dir:
     ensure => directory,
   }
 
   file { $zip_target:
     ensure  => directory,
-    require => File[$src_dir],
+    require => File[$base_src_dir],
   }
 
   archive { "iTop-${version}":
@@ -49,9 +49,9 @@ class itop::install::zip (
     checksum   => true,
     extension  => 'zip',
     url        => "${url}/iTop-${version}.zip",
-    target     => $src_dir,
+    target     => $base_src_dir,
     src_target => $zip_target,
-    root_dir   => 'web',
+    root_dir   => $version,
     require    => File[$zip_target],
   }
 
@@ -60,9 +60,9 @@ class itop::install::zip (
     checksum   => true,
     extension  => 'zip',
     url        => "${url}/toolkit-2.0.zip",
-    target     => "${src_dir}/web",
+    target     => $src_dir,
     src_target => $zip_target,
-    root_dir   => 'toolkit',
+    root_dir   => 'web',
     require    => Archive["iTop-${version}"]
   }
 

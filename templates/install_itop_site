@@ -152,6 +152,7 @@ sub install_itop
 
   chown $uid, $gid, $root;
 
+  # iTop Base system install
   opendir(my $dh, "${source}/web") || die;
   while( my $file = readdir $dh ) {
     next if $file =~ /^\./;
@@ -162,6 +163,16 @@ sub install_itop
     `cp -R ${source}/web/$file $root/`;
   }
   closedir $dh;
+
+  # iTop Toolkit install
+  opendir(my $dh2, "${source}/toolkit") || die;
+  while( my $file = readdir $dh2 ) {
+    next if $file =~ /^\./;
+    print "Copy ${source}/toolkit/$file/ To $root/\n" if $debug;
+    `rm -rf $root/$file`;
+    `cp -R ${source}/toolkit/$file $root/`;
+  }
+  closedir $dh2;
 
   `find $root -type f -exec chmod 644 '{}' ';'`;
   `find $root -type d -exec chmod 755 '{}' ';'`;
@@ -225,7 +236,7 @@ sub list_extension_dirs
   my $name = shift;
   my @extensions;
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
   opendir(my $dh, $dir) || die "can't opendir $dir : $!";
 
   #print "------ opening dir :$dir:\n";
@@ -252,7 +263,7 @@ sub install_ext
   # TODO Installation
   print Dumper( \@extensions );
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
   foreach my $ext ( @extensions ) {
     my $src_dir = "${dir}/$ext";
     my $dst_dir = "${root}/extensions/${ext}";
@@ -270,7 +281,7 @@ sub comp_ext_ver
 
   my $install = 0;
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
 
   foreach my $ext ( @extensions ) {
     my ( $new_ver ) = read_ext_version( $dir, $ext );

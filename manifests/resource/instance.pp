@@ -15,9 +15,9 @@ define itop::resource::instance (
 ) {
 
   file { [ $installdir ]:
-    ensure => directory,
-    mode   => '0755',
-    recurse => true,
+    ensure  => directory,
+    mode    => '0755',
+    #recurse => true,
   }
 
   $ext_str = join($extensions, ',')
@@ -53,7 +53,7 @@ define itop::resource::instance (
     group   => $group,
     mode    => '0750',
     require => File[$installdir],
-    recurse => true,
+    #recurse => true,
   }
 
 }

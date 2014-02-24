@@ -18,8 +18,9 @@ class itop::params (
   $itop_url           = undef,
 )
 {
-  $itop_src_dir = "${itop_base_src_dir}/${itop_version}"
-  $itop_bin_dir = "${itop_base_src_dir}/bin"
-  $itop_ext_dir = "${itop_src_dir}/extensions"
-  $itop_zip_dir = "${itop_src_dir}/zip"
+  $itop_src_dir     = "${itop_base_src_dir}/${itop_version}"
+  $itop_bin_dir     = "${itop_base_src_dir}/bin"
+  $itop_zip_dir     = "${itop_base_src_dir}/zip"
+  $itop_ext_dir     = "${itop_src_dir}/extensions"
+  $itop_ext_zip_dir = "${itop_src_dir}/zip"
 }

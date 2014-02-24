@@ -8,6 +8,7 @@ class itop::install::zip (
   $src_dir        = $itop::params::itop_src_dir,
   $bin_dir        = $itop::params::itop_bin_dir,
   $zip_target     = $itop::params::itop_zip_dir,
+  $ext_zip_target = $itop::params::itop_ext_zip_dir,
   $php_version    = ''
 ) inherits itop::params {
 
@@ -38,15 +39,16 @@ class itop::install::zip (
   file { $base_src_dir:
     ensure => directory,
   }
-  
-  file { $src_dir:
-    ensure => directory,
-    require => File[$base_src_dir],
-  }
+
+  # Not Needed anymore
+  #file { $src_dir:
+  #  ensure  => directory,
+  #  require => File[$base_src_dir],
+  #}
 
   file { $zip_target:
     ensure  => directory,
-    require => File[$src_dir],
+    require => File[$base_src_dir],
   }
 
   archive { "iTop-${version}":
@@ -54,9 +56,9 @@ class itop::install::zip (
     checksum   => true,
     extension  => 'zip',
     url        => "${url}/iTop-${version}.zip",
-    target     => $src_dir,
+    target     => $base_src_dir,
     src_target => $zip_target,
-    root_dir   => 'web',
+    root_dir   => $version,
     require    => File[$zip_target],
   }
 
@@ -65,37 +67,44 @@ class itop::install::zip (
     checksum   => true,
     extension  => 'zip',
     url        => "${url}/toolkit-2.0.zip",
-    target     => "${src_dir}/web",
+    target     => $src_dir,
     src_target => $zip_target,
     root_dir   => 'toolkit',
-    require    => Archive["iTop-${version}"]
+    require    => Archive["iTop-${version}"],
   }
 
   file { $bin_dir:
     ensure    => directory,
-    require   => Archive["iTop-${version}"]
+    require   => Archive["iTop-${version}"],
   }
+
   file { "${bin_dir}/install_itop_site":
     ensure  => present,
     content => template('itop/install_itop_site'),
     mode    => '0750',
-    require => File[$bin_dir]
+    require => File[$bin_dir],
   }
 
-  file { "${src_dir}/web/toolkit/ajax.toolkit.php":
-    ensure  => file,
-    mode    => '0644',
-    require => Archive['toolkit-2.0']
+  file { $ext_zip_target:
+    ensure  => directory,
+    require => Archive["iTop-${version}"],
   }
-  file { "${src_dir}/web/toolkit/index.php":
-    ensure  => file,
-    mode    => '0644',
-    require => Archive['toolkit-2.0']
-  }
-  file { "${src_dir}/web/toolkit/toolkit.css":
-    ensure  => file,
-    mode    => '0644',
-    require => Archive['toolkit-2.0']
-  }
+
+
+#  file { "${src_dir}/web/toolkit/ajax.toolkit.php":
+#    ensure  => file,
+#    mode    => '0644',
+#    require => Archive['toolkit-2.0']
+#  }
+#  file { "${src_dir}/web/toolkit/index.php":
+#    ensure  => file,
+#    mode    => '0644',
+#    require => Archive['toolkit-2.0']
+#  }
+#  file { "${src_dir}/web/toolkit/toolkit.css":
+#    ensure  => file,
+#    mode    => '0644',
+#    require => Archive['toolkit-2.0']
+#  }
 
 }

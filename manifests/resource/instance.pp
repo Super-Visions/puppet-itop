@@ -15,8 +15,8 @@ define itop::resource::instance (
 ) {
 
   file { [ $installdir ]:
-    ensure => directory,
-    mode   => '0755',
+    ensure  => directory,
+    mode    => '0644',
     recurse => true,
   }
 
@@ -51,7 +51,7 @@ define itop::resource::instance (
     ensure  => directory,
     owner   => $user,
     group   => $group,
-    mode    => '0750',
+    mode    => '0640',
     require => File[$installdir],
     recurse => true,
   }

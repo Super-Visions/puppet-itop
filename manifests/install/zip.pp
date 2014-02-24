@@ -40,10 +40,11 @@ class itop::install::zip (
     ensure => directory,
   }
 
-  file { $src_dir:
-    ensure  => directory,
-    require => File[$base_src_dir],
-  }
+  # Not Needed anymore
+  #file { $src_dir:
+  #  ensure  => directory,
+  #  require => File[$base_src_dir],
+  #}
 
   file { $zip_target:
     ensure  => directory,

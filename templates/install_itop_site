@@ -174,7 +174,6 @@ sub install_itop
   }
   closedir $dh2;
 
-
   `find $root -type f -exec chmod 644 '{}' ';'`;
   `find $root -type d -exec chmod 755 '{}' ';'`;
 }
@@ -237,7 +236,7 @@ sub list_extension_dirs
   my $name = shift;
   my @extensions;
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
   opendir(my $dh, $dir) || die "can't opendir $dir : $!";
 
   #print "------ opening dir :$dir:\n";
@@ -264,7 +263,7 @@ sub install_ext
   # TODO Installation
   print Dumper( \@extensions );
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
   foreach my $ext ( @extensions ) {
     my $src_dir = "${dir}/$ext";
     my $dst_dir = "${root}/extensions/${ext}";
@@ -282,7 +281,7 @@ sub comp_ext_ver
 
   my $install = 0;
 
-  my $dir = "${source}/extensions/${name}/web/extensions";
+  my $dir = "${source}/extensions/${name}/${name}/web/extensions";
 
   foreach my $ext ( @extensions ) {
     my ( $new_ver ) = read_ext_version( $dir, $ext );

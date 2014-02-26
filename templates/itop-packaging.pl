@@ -12,5 +12,8 @@ die "Couldn't get $url" unless defined $content;
 
 my @matches = ( $content =~ m/<a href="(.+)\.zip"/g );
 
+#my @matches = [];
+#push @matches, [$1, $2] while $content =~ m/<a href="(.+)-([\d-_\.]+)\.zip"/g;
+
 print Dumper \@matches;
 

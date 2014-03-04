@@ -7,6 +7,7 @@ define itop::resource::instance (
   $user           = 'apache',
   $group          = 'apache',
   $extensions     = [],
+  $install_mode   = undef,
   $db_server      = 'localhost',
   $db_user        = 'root',
   $db_passwd      = '',
@@ -44,12 +45,12 @@ define itop::resource::instance (
     require => Exec["iTop_install_${name}"],
   }
 
-  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
-    $install_mode = 'upgrade'
-  }
-  else {
-    $install_mode = 'install'
-  }
+#  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
+#    $install_mode = 'upgrade'
+#  }
+#  else {
+#    $install_mode = 'install'
+#  }
 
   #notify{"Docroot = ${docroot} with Install Mode = ${install_mode}":}
 

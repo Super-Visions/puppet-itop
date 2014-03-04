@@ -19,13 +19,6 @@ define itop::resource::instance (
   $src_dir        = $itop::params::itop_src_dir,
 ) {
 
-#  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
-#    $install_mode = 'upgrade'
-#  }
-#  else {
-#    $install_mode = 'install'
-#  }
-
   file { [ $installdir ]:
     ensure  => directory,
     mode    => '0755',
@@ -49,6 +42,13 @@ define itop::resource::instance (
     mode    => '0644',
     source  => 'puppet:///modules/itop/unattended-install.php',
     require => Exec["iTop_install_${name}"],
+  }
+
+  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
+    $install_mode = 'upgrade'
+  }
+  else {
+    $install_mode = 'install'
   }
 
   file { "${docroot}/toolkit/itop-auto-install.xml":

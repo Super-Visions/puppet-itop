@@ -10,7 +10,7 @@ define itop::resource::instance (
   $install_mode   = 'install',
   $db_server      = 'localhost',
   $db_user        = 'root',
-  $db_passwd      = undef,
+  $db_passwd      = '',
   $db_name        = undef,
   $database       = undef,
   $itop_url       = undef,

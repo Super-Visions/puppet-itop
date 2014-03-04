@@ -51,6 +51,8 @@ define itop::resource::instance (
     $install_mode = 'install'
   }
 
+  #notify{"Docroot = ${docroot} with Install Mode = ${install_mode}":}
+
   file { "${docroot}/toolkit/itop-auto-install.xml":
     ensure  => present,
     mode    => '0644',

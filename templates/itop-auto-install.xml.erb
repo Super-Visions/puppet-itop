@@ -19,8 +19,8 @@
   </database>
   <url><%= itop_url %></url>
   <admin_account>
-    <user>admin</user>
-    <pwd><%= itop_admin_pwd %></pwd>
+    <user><%= admin_account %></user>
+    <pwd><%= admin_pwd %></pwd>
     <language>EN US</language>
   </admin_account>
   <language>EN US</language>
@@ -32,7 +32,6 @@
     <item>itop-sla-computation</item>
     <item>itop-tickets</item>
     <item>itop-welcome-itil</item>
-    <item>superv-profiles-itil</item>
     <item>itop-config-mgmt</item>
     <item>itop-attachments</item>
     <item>itop-service-mgmt-provider</item>
@@ -40,25 +39,9 @@
     <item>itop-change-mgmt-itil</item>
     <item>itop-knownerror-mgmt</item>
     <item>itop-problem-mgmt</item>
-    <item>superv-bonita</item>
-    <item>superv-contact</item>
-    <item>superv-legacy-ticket</item>
-    <item>superv-location</item>
-    <item>superv-organization-adapter</item>
-    <item>superv-service-mgmt-provider</item>
-    <item>superv-supplier</item>
-    <item>superv-tickets</item>
-    <item>superv-typology-adaptor</item>
-    <item>superv-config-mgmt</item>
-    <item>superv-datacenter-mgmt</item>
-    <item>superv-incident-mgmt-itil</item>
-    <item>superv-network-mgmt</item>
-    <item>superv-power-mgmt</item>
-    <item>superv-problem-mgmt</item>
-    <item>superv-server-mgmt</item>
-    <item>superv-software-mgmt</item>
-    <item>superv-storage-mgmt</item>
-    <item>superv-virtualization-mgmt</item>
+<% extensions.each do |ext| -%>
+    <item><%= ext %></item>
+<% end -%>
   </selected_modules>
   <sample_data></sample_data>
   <old_addon></old_addon>

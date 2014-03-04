@@ -7,9 +7,15 @@ define itop::resource::instance (
   $user           = 'apache',
   $group          = 'apache',
   $extensions     = [],
+  $install_mode   = 'install',
+  $db_server      = 'localhost',
+  $db_user        = 'root',
+  $db_passwd      = undef,
+  $db_name        = undef,
   $database       = undef,
-  $url            = undef,
-  $admin_account  = undef,
+  $itop_url       = undef,
+  $admin_account  = 'admin',
+  $admin_pwd      = 'admin',
   $modules        = undef,
   $src_dir        = $itop::params::itop_src_dir,
 ) {
@@ -36,6 +42,13 @@ define itop::resource::instance (
     ensure  => present,
     mode    => '0644',
     source  => 'puppet:///modules/itop/unattended-install.php',
+    require => Exec["iTop_install_${name}"],
+  }
+
+  file { "${docroot}/toolkit/itop-auto-install.xml":
+    ensure  => present,
+    mode    => '0644',
+    content => template('itop/itop-auto-install.xml.erb'),
     require => Exec["iTop_install_${name}"],
   }
 

@@ -49,7 +49,7 @@ define itop::resource::instance (
     ensure  => present,
     mode    => '0644',
     content => template('itop/itop-auto-install.xml.erb'),
-    require => Exec["iTop_install_${name}"],
+    require => file["${docroot}/toolkit/unattended-install.php"],
   }
 
   #file { $docroot:

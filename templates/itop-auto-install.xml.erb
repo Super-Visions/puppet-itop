@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <installation>
-  <mode>install</mode>
+  <mode><%= install_mode %></mode>
   <preinstall>
     <copies type="array"/>
   </preinstall>
@@ -11,16 +11,16 @@
   <target_env>production</target_env>
   <workspace_dir></workspace_dir>
   <database>
-    <server>localhost</server>
-    <user>root</user>
-    <pwd></pwd>
-    <name>itop</name>
+    <server><%= db_server %></server>
+    <user><%= db_user %></user>
+    <pwd><%= db_passwd %></pwd>
+    <name><%= db_name %></name>
     <prefix></prefix>
   </database>
-  <url>http://itop-dev2.local/itop/</url>
+  <url><%= itop_url %></url>
   <admin_account>
     <user>admin</user>
-    <pwd>admin</pwd>
+    <pwd><%= itop_admin_pwd %></pwd>
     <language>EN US</language>
   </admin_account>
   <language>EN US</language>

@@ -7,18 +7,24 @@ define itop::resource::instance (
   $user           = 'apache',
   $group          = 'apache',
   $extensions     = [],
-  $install_mode   = 'install',
   $db_server      = 'localhost',
   $db_user        = 'root',
   $db_passwd      = '',
   $db_name        = undef,
-  $database       = undef,
+  $db_prefix      = '',
   $itop_url       = undef,
   $admin_account  = 'admin',
   $admin_pwd      = 'admin',
   $modules        = undef,
   $src_dir        = $itop::params::itop_src_dir,
 ) {
+
+#  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
+#    $install_mode = 'upgrade'
+#  }
+#  else {
+#    $install_mode = 'install'
+#  }
 
   file { [ $installdir ]:
     ensure  => directory,

@@ -40,7 +40,7 @@
     <item>itop-knownerror-mgmt</item>
     <item>itop-problem-mgmt</item>
 <% extensions.each do |ext| -%>
-    <item><%= ext %></item>
+    <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
   </selected_modules>
   <sample_data></sample_data>

@@ -4,20 +4,21 @@
 define itop::resource::instance (
   $installdir,
   $docroot,
-  $user           = 'apache',
-  $group          = 'apache',
-  $extensions     = [],
-  $install_mode   = undef,
-  $db_server      = 'localhost',
-  $db_user        = 'root',
-  $db_passwd      = '',
-  $db_name        = undef,
-  $db_prefix      = '',
-  $itop_url       = undef,
-  $admin_account  = 'admin',
-  $admin_pwd      = 'admin',
-  $modules        = undef,
-  $src_dir        = $itop::params::itop_src_dir,
+  $user             = 'apache',
+  $group            = 'apache',
+  $extensions       = [],
+  $install_mode     = undef,
+  $db_server        = 'localhost',
+  $db_user          = 'root',
+  $db_passwd        = '',
+  $db_name          = undef,
+  $db_prefix        = '',
+  $itop_url         = undef,
+  $admin_account    = 'admin',
+  $admin_pwd        = 'admin',
+  $modules          = undef,
+  $itop_config_gen  = 0,
+  $src_dir          = $itop::params::itop_src_dir,
 ) {
 
   file { [ $installdir ]:
@@ -48,9 +49,9 @@ define itop::resource::instance (
   if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
     exec { "iTop_unattended_upgrade_${name}":
       command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
-      onlyif    => "grep upgrade ${docroot}/conf/production/config-itop.php",
+      #onlyif    => "grep upgrade ${docroot}/conf/production/config-itop.php",
+      logoutput => true,
       cwd       => "${docroot}/toolkit",
-      creates   => "${docroot}/conf/production/config-itop.php",
       path      => '/usr/bin:/usr/sbin:/bin',
       user      => $user,
       require   => File["${docroot}/toolkit/unattended-install.php"],
@@ -62,6 +63,7 @@ define itop::resource::instance (
   else {
     exec { "iTop_unattended_install_${name}":
       command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
+      logoutput => true,
       cwd       => "${docroot}/toolkit",
       creates   => "${docroot}/conf/production/config-itop.php",
       user      => $user,

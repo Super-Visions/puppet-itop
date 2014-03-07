@@ -46,7 +46,7 @@ define itop::resource::instance (
   }
 
   if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
-    exec { "iTop_unattended_install_${name}":
+    exec { "iTop_unattended_upgrade_${name}":
       command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
       onlyif    => "grep upgrade ${docroot}/conf/production/config-itop.php",
       cwd       => "${docroot}/toolkit",

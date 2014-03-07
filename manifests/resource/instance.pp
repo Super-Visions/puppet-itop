@@ -45,12 +45,31 @@ define itop::resource::instance (
     require => Exec["iTop_install_${name}"],
   }
 
-#  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
-#    $install_mode = 'upgrade'
-#  }
-#  else {
-#    $install_mode = 'install'
-#  }
+  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
+    exec { "iTop_unattended_install_${name}":
+      command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
+      onlyif    => "grep upgrade ${docroot}/conf/production/config-itop.php",
+      cwd       => "${docroot}/toolkit",
+      creates   => "${docroot}/conf/production/config-itop.php",
+      user      => $user,
+      require   => File["${docroot}/toolkit/unattended-install.php"],
+      subscribe => [  Exec["iTop_install_${name}"],
+                      File["${docroot}/toolkit/itop-auto-install.xml"],
+      ],
+    }
+  }
+  else {
+    exec { "iTop_unattended_install_${name}":
+      command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
+      cwd       => "${docroot}/toolkit",
+      creates   => "${docroot}/conf/production/config-itop.php",
+      user      => $user,
+      require   => File["${docroot}/toolkit/unattended-install.php"],
+      subscribe => [  Exec["iTop_install_${name}"],
+                      File["${docroot}/toolkit/itop-auto-install.xml"],
+      ],
+    }
+  }
 
   #notify{"Docroot = ${docroot} with Install Mode = ${install_mode}":}
 

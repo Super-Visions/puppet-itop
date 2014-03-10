@@ -25,20 +25,9 @@
   </admin_account>
   <language>EN US</language>
   <selected_modules type="array">
-    <item>authent-external</item>
-    <item>authent-ldap</item>
-    <item>authent-local</item>
-    <item>itop-profiles-itil</item>
-    <item>itop-sla-computation</item>
-    <item>itop-tickets</item>
-    <item>itop-welcome-itil</item>
-    <item>itop-config-mgmt</item>
-    <item>itop-attachments</item>
-    <item>itop-service-mgmt-provider</item>
-    <item>itop-incident-mgmt-itil</item>
-    <item>itop-change-mgmt-itil</item>
-    <item>itop-knownerror-mgmt</item>
-    <item>itop-problem-mgmt</item>
+<% default_extensions.each do |ext| -%>
+    <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
+<% end -%>
 <% extensions.each do |ext| -%>
     <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>

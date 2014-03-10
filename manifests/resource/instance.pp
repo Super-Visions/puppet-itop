@@ -17,7 +17,6 @@ define itop::resource::instance (
   $admin_account    = 'admin',
   $admin_pwd        = 'admin',
   $modules          = undef,
-  $itop_config_gen  = 0,
   $src_dir          = $itop::params::itop_src_dir,
 ) {
 

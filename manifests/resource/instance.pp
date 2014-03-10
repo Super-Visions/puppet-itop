@@ -38,58 +38,6 @@ define itop::resource::instance (
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
   }
 
-  file { "${docroot}/toolkit/unattended-install.php":
-    ensure  => present,
-    mode    => '0644',
-    source  => 'puppet:///modules/itop/unattended-install.php',
-    require => Exec["iTop_install_${name}"],
-  }
-
-  if file_exists("${docroot}/conf/production/config-itop.php") == 1 {
-    exec { "iTop_unattended_upgrade_${name}":
-      command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
-      #onlyif    => "grep upgrade ${docroot}/conf/production/config-itop.php",
-      logoutput => true,
-      cwd       => "${docroot}/toolkit",
-      path      => '/usr/bin:/usr/sbin:/bin',
-      user      => $user,
-      require   => File["${docroot}/toolkit/unattended-install.php"],
-      subscribe => [  Exec["iTop_install_${name}"],
-                      File["${docroot}/toolkit/itop-auto-install.xml"],
-      ],
-    }
-  }
-  else {
-    exec { "iTop_unattended_install_${name}":
-      command   => "php unattended-install.php --response_file=${docroot}/toolkit/itop-auto-install.xml --install=1",
-      logoutput => true,
-      cwd       => "${docroot}/toolkit",
-      creates   => "${docroot}/conf/production/config-itop.php",
-      user      => $user,
-      path      => '/usr/bin:/usr/sbin:/bin',
-      require   => File["${docroot}/toolkit/unattended-install.php"],
-      subscribe => [  Exec["iTop_install_${name}"],
-                      File["${docroot}/toolkit/itop-auto-install.xml"],
-      ],
-    }
-  }
-
-  #notify{"Docroot = ${docroot} with Install Mode = ${install_mode}":}
-
-  file { "${docroot}/toolkit/itop-auto-install.xml":
-    ensure  => present,
-    mode    => '0644',
-    content => template('itop/itop-auto-install.xml.erb'),
-    require => file["${docroot}/toolkit/unattended-install.php"],
-  }
-
-  #file { $docroot:
-    #ensure  => directory,
-    #mode    => '0644',
-    #recurse => true,
-    #require => Exec["iTop_install_${name}"],
-  #}
-
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production",
             "${docroot}/extensions", "${docroot}/log" ]:
     ensure  => directory,
@@ -97,7 +45,78 @@ define itop::resource::instance (
     group   => $group,
     mode    => '0750',
     require => File[$installdir],
-    #recurse => true,
   }
+
+  file { "${docroot}/toolkit/unattended-install.php":
+    ensure  => present,
+    mode    => '0644',
+    source  => 'puppet:///modules/itop/unattended-install.php',
+    require => Exec["iTop_install_${name}"],
+  }
+
+  $configfile = "${docroot}/conf/production/config-itop.php"
+  $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
+
+  case $install_mode {
+    'upgrade': {
+      $prev_conf_file = $configfile
+
+      file { "${docroot}/toolkit/itop-auto-install.xml":
+        ensure  => present,
+        mode    => '0644',
+        content => template('itop/itop-auto-install.xml.erb'),
+        require => file["${docroot}/toolkit/unattended-install.php"],
+      }
+
+      exec { "iTop_unattended_upgrade_${name}":
+        command     => "php unattended-install.php --response_file=${responsefile} --install=1",
+        onlyif      => [  "test -e ${configfile}",
+                          "chmod a+w ${configfile}",
+        ],
+        logoutput   => true,
+        cwd         => "${docroot}/toolkit",
+        path        => '/usr/bin:/usr/sbin:/bin',
+        user        => $user,
+        refreshonly => true,
+        require     => File["${docroot}/toolkit/unattended-install.php"],
+        subscribe   => [  Exec["iTop_install_${name}"],
+                          File["${docroot}/toolkit/itop-auto-install.xml"],
+        ],
+      }
+    }
+    'install': {
+      $prev_conf_file = ''
+
+      file { "${docroot}/toolkit/itop-auto-install.xml":
+        ensure  => present,
+        mode    => '0644',
+        content => template('itop/itop-auto-install.xml.erb'),
+        require => file["${docroot}/toolkit/unattended-install.php"],
+      }
+
+      exec { "iTop_unattended_install_${name}":
+        command   => "php unattended-install.php --response_file=${responsefile} --install=1",
+        logoutput => true,
+        cwd       => "${docroot}/toolkit",
+        creates   => "${docroot}/conf/production/config-itop.php",
+        user      => $user,
+        path      => '/usr/bin:/usr/sbin:/bin',
+        require   => File["${docroot}/toolkit/unattended-install.php"],
+        subscribe => [  Exec["iTop_install_${name}"],
+                        File["${docroot}/toolkit/itop-auto-install.xml"],
+        ],
+      }
+    }
+    default: { fail("Unrecognized Install Mode: ${install_mode}") }
+  }
+
+  #notify{"Docroot = ${docroot} with Install Mode = ${install_mode} and Config File ${configfile}":}
+
+  #file { "${docroot}/toolkit/itop-auto-install.xml":
+  #  ensure  => present,
+  #  mode    => '0644',
+  #  content => template('itop/itop-auto-install.xml.erb'),
+  #  require => file["${docroot}/toolkit/unattended-install.php"],
+  #}
 
 }

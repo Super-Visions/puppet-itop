@@ -39,12 +39,11 @@ define itop::resource::instance (
     require => Exec["iTop_install_${name}"],
   }
 
-  #file { $docroot:
-    #ensure  => directory,
-    #mode    => '0644',
-    #recurse => true,
-    #require => Exec["iTop_install_${name}"],
-  #}
+  file { $docroot:
+    ensure  => directory,
+    mode    => '0755',
+    require => File[$installdir],
+  }
 
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production",
             "${docroot}/extensions", "${docroot}/log" ]:
@@ -52,7 +51,7 @@ define itop::resource::instance (
     owner   => $user,
     group   => $group,
     mode    => '0750',
-    require => File[$installdir],
+    require => File[$docroot],
     #recurse => true,
   }
 

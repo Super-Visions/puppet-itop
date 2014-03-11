@@ -70,9 +70,8 @@ define itop::resource::instance (
       }
 
       exec { "iTop_unattended_upgrade_${name}":
-        command     => "php unattended-install.php --response_file=${responsefile} --install=1",
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
         onlyif      => [  "test -e ${configfile}",
-                          "chmod a+w ${configfile}",
         ],
         logoutput   => true,
         cwd         => "${docroot}/toolkit",

@@ -66,7 +66,7 @@ define itop::resource::instance (
         ensure  => present,
         mode    => '0644',
         content => template('itop/itop-auto-install.xml.erb'),
-        require => file["${docroot}/toolkit/unattended-install.php"],
+        require => File["${docroot}/toolkit/unattended-install.php"],
       }
 
       exec { "iTop_unattended_upgrade_${name}":
@@ -91,7 +91,7 @@ define itop::resource::instance (
         ensure  => present,
         mode    => '0644',
         content => template('itop/itop-auto-install.xml.erb'),
-        require => file["${docroot}/toolkit/unattended-install.php"],
+        require => File["${docroot}/toolkit/unattended-install.php"],
       }
 
       exec { "iTop_unattended_install_${name}":

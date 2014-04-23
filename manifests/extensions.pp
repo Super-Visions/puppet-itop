@@ -7,7 +7,7 @@
 #                                  web/extensions/<extension directory name>
 #
 class itop::extensions (
-  $extension_hash = hiera('itop::extension_hash', {})
+  $extension_hash = $itop::extension_hash,
 )
 {
   #Class['itop::install'] -> Class['itop::extensions']

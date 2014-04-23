@@ -2,14 +2,14 @@
 # Class itop::install
 #
 class itop::install::zip (
-  $version        = $itop::params::itop_version,
-  $url            = $itop::params::itop_url,
-  $base_src_dir   = $itop::params::itop_base_src_dir,
-  $src_dir        = $itop::params::itop_src_dir,
-  $bin_dir        = $itop::params::itop_bin_dir,
-  $zip_target     = $itop::params::itop_zip_dir,
+  $version        = $itop::version,
+  $zip_url        = $itop::zip_url,
+  $base_src_dir   = $itop::base_src_dir,
+  $src_dir        = $itop::src_dir,
+  $bin_dir        = $itop::bin_dir,
+  $zip_target     = $itop::zip_dir,
   $php_version    = ''
-) inherits itop::params {
+) {
 
 #  $srcdir = "${base_src_dir}/${version}"
 

@@ -18,8 +18,9 @@ define itop::resource::instance (
   $admin_account      = 'admin',
   $admin_pwd          = 'admin',
   $modules            = undef,
-  $src_dir            = $itop::params::itop_src_dir,
-) {
+  $src_dir            = $itop::src_dir,
+)
+{
 
   file { [ $installdir ]:
     ensure  => directory,

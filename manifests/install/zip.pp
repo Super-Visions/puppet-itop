@@ -8,42 +8,12 @@ class itop::install::zip (
   $src_dir        = $itop::src_dir,
   $bin_dir        = $itop::bin_dir,
   $zip_target     = $itop::zip_dir,
-  $php_version    = ''
-) {
-
-#  $srcdir = "${base_src_dir}/${version}"
-
-#  Package['unzip'] -> Class['itop::install::zip']
-
-  # EPEL required for 'php-mcrypt', 'php-domxml-php4-php5'
-#  package{ [ "php${php_version}-mysql", "php${php_version}-soap",
-#              "php${php_version}-ldap"  ]:
-#    ensure => installed,
-#  }
-#  package{ [ 'php-domxml-php4-php5' ]:
-#    ensure => installed,
-#  }
-
-  # Not available on EPEL EL 5
-  #package{ [ "php-mcrypt" ]:
-  #  ensure => installed,
-  #}
-
-  #file { [ "${installdir}/dl","${installdir}/session",
-  #          "${installdir}/itop-${version}" ]:
-  #  ensure  => directory,
-  #  owner   => $user,
-  #}
+)
+{
 
   file { $base_src_dir:
     ensure => directory,
   }
-
-  # Not Needed anymore
-  #file { $src_dir:
-  #  ensure  => directory,
-  #  require => File[$base_src_dir],
-  #}
 
   file { $zip_target:
     ensure  => directory,
@@ -54,7 +24,7 @@ class itop::install::zip (
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${url}/iTop-${version}.zip",
+    url        => "${zip_url}/iTop-${version}.zip",
     target     => $base_src_dir,
     src_target => $zip_target,
     root_dir   => $version,
@@ -65,7 +35,7 @@ class itop::install::zip (
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${url}/toolkit-2.0.zip",
+    url        => "${zip_url}/toolkit-2.0.zip",
     target     => $src_dir,
     src_target => $zip_target,
     root_dir   => 'toolkit',

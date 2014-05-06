@@ -108,6 +108,8 @@ define itop::resource::instance (
         ],
       }
     }
+    'manual': { }
+    '': {}
     default: { fail("Unrecognized Install Mode: ${install_mode}") }
   }
 

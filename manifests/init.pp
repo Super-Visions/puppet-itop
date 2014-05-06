@@ -1,15 +1,19 @@
 # init file for iTop Class
 class itop (
   $version        = undef,
-  $zip_url        = undef, 
-  $base_src_dir   = $itop::params::base_src_dir,
-  $install_type   = $itop::params::install_type,
-  $bin_dir        = $itop::params::bin_dir,
-  $zip_dir        = $itop::params::zip_dir,
-  $ext_dir        = $itop::params::ext_dir,
+  $zip_url        = undef,
+  $base_src_dir   = '/usr/local/itop',
+  $install_type   = 'zip',
   $extension_hash = {},
   $instance_hash  = {},
-) inherits itop::params {
+)
+{
+
+  ### Declaring calculated variables
+  $bin_dir        = "${base_src_dir}/bin"
+  $zip_dir        = "${base_src_dir}/zip"
+  $src_dir        = "${base_src_dir}/${version}"
+  $ext_dir        = "${src_dir}/extensions"
 
   anchor  { 'itop::start': }->
   class   { 'itop::install': }->

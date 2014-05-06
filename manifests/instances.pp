@@ -2,8 +2,6 @@
 # Doc
 #
 class itop::instances (
-  $version       = undef,
-  $base_src_dir  = undef,
   $instance_hash = $itop::instance_hash,
 )
 {

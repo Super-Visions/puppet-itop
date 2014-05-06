@@ -10,7 +10,8 @@ define itop::resource::extension (
   $zip_url    = $itop::zip_url,
   $target     = $itop::ext_dir,
   $zip_target = $itop::zip_dir,
-) {
+)
+{
   archive { $name:
     ensure     => present,
     checksum   => true,

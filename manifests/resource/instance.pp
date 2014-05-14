@@ -56,6 +56,20 @@ define itop::resource::instance (
     require => Exec["iTop_install_${name}"],
   }
 
+  file { "${docroot}/webservices/export-simpleclient.php":
+    ensure  => present,
+    mode    => '0644',
+    source  => "${docroot}/webservices/export.php",
+    require => Exec["iTop_install_${name}"],
+  }
+
+  file { "${docroot}/webservices/rest-simpleclient.php":
+    ensure  => present,
+    mode    => '0644',
+    source  => "${docroot}/webservices/rest.php",
+    require => Exec["iTop_install_${name}"],
+  }
+
   $configfile = "${docroot}/conf/production/config-itop.php"
   $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
 

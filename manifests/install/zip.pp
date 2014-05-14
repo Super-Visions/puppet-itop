@@ -53,21 +53,4 @@ class itop::install::zip (
     mode    => '0750',
     require => File[$bin_dir],
   }
-
-#  file { "${src_dir}/web/toolkit/ajax.toolkit.php":
-#    ensure  => file,
-#    mode    => '0644',
-#    require => Archive['toolkit-2.0']
-#  }
-#  file { "${src_dir}/web/toolkit/index.php":
-#    ensure  => file,
-#    mode    => '0644',
-#    require => Archive['toolkit-2.0']
-#  }
-#  file { "${src_dir}/web/toolkit/toolkit.css":
-#    ensure  => file,
-#    mode    => '0644',
-#    require => Archive['toolkit-2.0']
-#  }
-
 }

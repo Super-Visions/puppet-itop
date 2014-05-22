@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <installation>
-  <mode><%= install_mode %></mode>
+  <mode><%= @install_mode %></mode>
   <preinstall>
     <copies type="array"/>
   </preinstall>
   <source_dir>datamodels/2.x/</source_dir>
   <datamodel_version>2.0.0</datamodel_version>
-  <previous_configuration_file><%= prev_conf_file %></previous_configuration_file>
+  <previous_configuration_file><%= @prev_conf_file %></previous_configuration_file>
   <extensions_dir>extensions</extensions_dir>
   <target_env>production</target_env>
   <workspace_dir></workspace_dir>
   <database>
-    <server><%= db_server %></server>
-    <user><%= db_user %></user>
-    <pwd><%= db_passwd %></pwd>
-    <name><%= db_name %></name>
-    <prefix><%= db_prefix %></prefix>
+    <server><%= @db_server %></server>
+    <user><%= @db_user %></user>
+    <pwd><%= @db_passwd %></pwd>
+    <name><%= @db_name %></name>
+    <prefix><%= @db_prefix %></prefix>
   </database>
-  <url><%= itop_url %></url>
+  <url><%= @itop_url %></url>
   <admin_account>
-    <user><%= admin_account %></user>
-    <pwd><%= admin_pwd %></pwd>
+    <user><%= @admin_account %></user>
+    <pwd><%= @admin_pwd %></pwd>
     <language>EN US</language>
   </admin_account>
   <language>EN US</language>
   <selected_modules type="array">
-<% default_extensions.each do |ext| -%>
+<% @default_extensions.each do |ext| -%>
     <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
-<% extensions.each do |ext| -%>
+<% @extensions.each do |ext| -%>
     <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
   </selected_modules>

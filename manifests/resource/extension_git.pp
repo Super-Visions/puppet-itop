@@ -8,23 +8,18 @@
 #
 define itop::resource::extension_git (
   $extension_src_url = $itop::extension_src_url,
-  $target     = $itop::ext_dir,
-  $zip_target = $itop::zip_dir,
+  $ext_dir     = $itop::ext_dir,
+  $git_target = $itop::git_dir,
+  $revision   = undef,
 )
 {
-  # archive { $name:
-  #   ensure     => present,
-  #   checksum   => true,
-  #   extension  => 'zip',
-  #   url        => "${extension_src_url}/${name}.zip",
-  #   target     => $target,
-  #   src_target => $zip_target,
-  # }
-  vcsrepo { "${target}/${name}":
+
+  vcsrepo { "${ext_dir}/${name}/${name}/web/extensions":
     ensure   => present,
     provider => git,
     source   => "${extension_src_url}/${name}.git",
-    #revision => '0c466b8a5a45f6cd7de82c08df2fb4ce1e920a31',
-    #user => 'someUser'
+    revision => $revision,
+    #user    => 'someUser'
   }
+
 }

@@ -1,12 +1,11 @@
 # init file for iTop Class
 class itop (
   $installroot,
-  $version        = undef,
+  $itop_version    = undef,
   $zip_url        = undef,
   $base_src_url        = undef,
   $extension_src_url        = undef,
   $base_src_dir   = '/usr/local/itop',
-  #$install_type   = 'zip',
   $base_install_type   = 'zip',
   $extension_install_type   = 'zip',
   $extension_hash = {},
@@ -17,7 +16,8 @@ class itop (
   ### Declaring calculated variables
   $bin_dir        = "${base_src_dir}/bin"
   $zip_dir        = "${base_src_dir}/zip"
-  $src_dir        = "${base_src_dir}/${version}"
+  $git_dir        = "${base_src_dir}/git"
+  $src_dir        = "${base_src_dir}/${itop_version}"
   $ext_dir        = "${src_dir}/extensions"
 
   anchor  { 'itop::start': }->

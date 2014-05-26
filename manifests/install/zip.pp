@@ -3,7 +3,8 @@
 #
 class itop::install::zip (
   $version        = $itop::version,
-  $zip_url        = $itop::zip_url,
+  #$zip_url        = $itop::zip_url,
+  $base_src_url   = $itop::base_src_url,
   $base_src_dir   = $itop::base_src_dir,
   $src_dir        = $itop::src_dir,
   $bin_dir        = $itop::bin_dir,
@@ -24,7 +25,7 @@ class itop::install::zip (
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${zip_url}/iTop-${version}.zip",
+    url        => "${base_src_url}/iTop-${version}.zip",
     target     => $base_src_dir,
     src_target => $zip_target,
     root_dir   => $version,
@@ -35,7 +36,7 @@ class itop::install::zip (
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${zip_url}/toolkit-2.0.zip",
+    url        => "${base_src_url}/toolkit-2.0.zip",
     target     => $src_dir,
     src_target => $zip_target,
     root_dir   => 'toolkit',

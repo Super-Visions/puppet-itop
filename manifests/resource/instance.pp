@@ -97,6 +97,7 @@ define itop::resource::instance (
         subscribe   => [  Exec["iTop_install_${name}"],
                           File["${docroot}/toolkit/itop-auto-install.xml"],
         ],
+        notify      => Service['httpd'],
       }
     }
     'install': {
@@ -120,6 +121,7 @@ define itop::resource::instance (
         subscribe => [  Exec["iTop_install_${name}"],
                         File["${docroot}/toolkit/itop-auto-install.xml"],
         ],
+        notify      => Service['httpd'],
       }
     }
     'manual': { }

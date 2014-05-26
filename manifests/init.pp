@@ -2,8 +2,12 @@
 class itop (
   $version        = undef,
   $zip_url        = undef,
+  $base_src_url        = undef,
+  $extension_src_url        = undef,
   $base_src_dir   = '/usr/local/itop',
-  $install_type   = 'zip',
+  #$install_type   = 'zip',
+  $base_install_type   = 'zip',
+  $extension_install_type   = 'zip',
   $extension_hash = {},
   $instance_hash  = {},
 )

@@ -6,8 +6,9 @@
 #                  - Internal structure for the zip is:
 #                            web/extensions/<extension directory name>
 #
-define itop::resource::extension (
-  $zip_url    = $itop::zip_url,
+define itop::resource::extension_zip (
+  #$zip_url    = $itop::zip_url,
+  $extension_src_url = $itop::extension_src_url,
   $target     = $itop::ext_dir,
   $zip_target = $itop::zip_dir,
 )
@@ -16,7 +17,7 @@ define itop::resource::extension (
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${zip_url}/${name}.zip",
+    url        => "${extension_src_url}/${name}.zip",
     target     => $target,
     src_target => $zip_target,
   }

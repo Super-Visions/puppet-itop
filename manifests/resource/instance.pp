@@ -2,8 +2,9 @@
 # Class itop::resource::instance
 #
 define itop::resource::instance (
-  $installdir,
-  $docroot,
+  $installroot     = $itop::installroot,
+  #$installdir,
+  #$docroot,
   $user               = 'apache',
   $group              = 'apache',
   $extensions         = [],
@@ -22,11 +23,19 @@ define itop::resource::instance (
 )
 {
 
-  file { [ $installdir ]:
+  file { [ "${installroot}/${name}" ]:
     ensure  => directory,
     mode    => '0755',
-    #recurse => true,
   }
+
+  file { [ "${installroot}/${name}/session", "${installroot}/${name}/http" ]:
+    ensure  => directory,
+    mode    => '0750',
+    owner   => $user,
+    group   => $group,
+  }
+
+  $docroot = "${installroot}/${name}/http"
 
   $ext_str = join($extensions, ',')
 
@@ -46,7 +55,7 @@ define itop::resource::instance (
     owner   => $user,
     group   => $group,
     mode    => '0750',
-    require => File[$installdir],
+    require => File[$docroot],
   }
 
   file { "${docroot}/toolkit/unattended-install.php":

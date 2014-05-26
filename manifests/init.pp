@@ -1,5 +1,6 @@
 # init file for iTop Class
 class itop (
+  $installroot,
   $version        = undef,
   $zip_url        = undef,
   $base_src_url        = undef,

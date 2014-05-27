@@ -14,7 +14,7 @@ define itop::resource::extension_git (
 )
 {
 
-  vcsrepo { "${ext_dir}/${name}/${name}/web/extensions":
+  vcsrepo { "${ext_dir}/${name}/${name}/web/extensions/${name}":
     ensure   => present,
     provider => git,
     source   => "${extension_src_url}/${name}.git",

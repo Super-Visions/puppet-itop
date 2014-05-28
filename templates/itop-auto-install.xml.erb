@@ -28,8 +28,8 @@
 <% @default_extensions.each do |ext| -%>
     <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
-<% @extensions.each do |ext| -%>
-    <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
+<% @extensions.each do |key,data| -%>
+    <item><%= key.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
   </selected_modules>
   <sample_data></sample_data>

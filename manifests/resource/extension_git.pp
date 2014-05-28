@@ -8,14 +8,13 @@
 #
 define itop::resource::extension_git (
   $extension_src_url = $itop::extension_src_url,
-  $ext_dir     = $itop::ext_dir,
-  $git_target = $itop::git_dir,
+  $ext_dir     = "$itop::ext_dir/${name}/${name}/web/extensions",
   $revision   = undef,
 )
 {
 
-  vcsrepo { "${ext_dir}/${name}/${name}/web/extensions/${name}":
-    ensure   => present,
+  vcsrepo { "${ext_dir}/${name}":
+    ensure   => latest,
     provider => git,
     source   => "${extension_src_url}/${name}.git",
     revision => $revision,

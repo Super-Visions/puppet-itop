@@ -2,6 +2,7 @@ define itop::resource::extensions_git (
   $extensions,
   $docroot,
   $default_revision,
+  $user,
 )
 {
 
@@ -12,6 +13,7 @@ define itop::resource::extensions_git (
 
     $defaults = {
       instance_name => $name,
+      user => $user,
       revision => $default_revision,
       ext_dir  => "$docroot/extensions",
     }

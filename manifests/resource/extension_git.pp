@@ -1,6 +1,7 @@
 
 define itop::resource::extension_git (
   $instance_name,
+  $user,
   $extension_src_url = $itop::extension_src_url,
   $ext_dir     = undef,
   $revision   = undef,
@@ -22,7 +23,7 @@ define itop::resource::extension_git (
     provider => git,
     source   => "${extension_src_url}/${extension_name}.git",
     revision => $revision,
-    #user    => 'someUser'
+    user     => $user,
   }
 
 }

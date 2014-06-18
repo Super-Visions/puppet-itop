@@ -75,6 +75,7 @@ define itop::resource::instance (
         extensions => $extensions,
         docroot    => $docroot,
         default_revision => $default_revision,
+        user => $user,
         require => Exec["iTop_install_${name}"],
       }
     }

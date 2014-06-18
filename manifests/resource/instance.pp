@@ -47,7 +47,14 @@ define itop::resource::instance (
   }
 
   cron { "iTop_cron_${name}":
+    ensure  => absent,
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
+  }
+
+  cron { "iTop_cron_${name}_${user}":
+    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
+    user    => $user,
+    minute  => '*/5',
   }
 
   file { [ "${docroot}/conf", "${docroot}/data", "${docroot}/env-production",

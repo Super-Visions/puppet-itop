@@ -1,22 +1,26 @@
-#  iTop Custom Extensions installation.
-#
-#  Valid for own created extenstions and TeemIP.
-#
-#  Requirements:   - Source file must be a zip file
-#                  - Internal structure for the zip is:
-#                            web/extensions/<extension directory name>
-#
+
 define itop::resource::extension_git (
+  $instance_name,
   $extension_src_url = $itop::extension_src_url,
-  $ext_dir     = "$itop::ext_dir/${name}/${name}/web/extensions",
+  $ext_dir     = undef,
   $revision   = undef,
 )
 {
 
-  vcsrepo { "${ext_dir}/${name}":
+  $extension_name = regsubst( $name, "^${instance_name}_", '' )
+
+  #notify { "instance_name ${instance_name}:${extension_name}: ": }
+
+  if ! $ext_dir {
+    $fix_ext_dir = "${::itop::ext_dir}/${extension_name}/${extension_name}/web/extensions"
+  } else {
+    $fix_ext_dir = $ext_dir
+  }
+
+  vcsrepo { "${fix_ext_dir}/${extension_name}":
     ensure   => latest,
     provider => git,
-    source   => "${extension_src_url}/${name}.git",
+    source   => "${extension_src_url}/${extension_name}.git",
     revision => $revision,
     #user    => 'someUser'
   }

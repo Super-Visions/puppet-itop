@@ -70,7 +70,7 @@ define itop::resource::instance (
   # Manage vcsrepo's directly here
   case $extension_install_type {
     git: {
-      class { 'itop::resource::extensions_git':
+      itop::resource::extensions_git { $name:
         extensions => $extensions,
         docroot    => $docroot,
         default_revision => $default_revision,
@@ -134,7 +134,8 @@ define itop::resource::instance (
       #require   => File[$responsefile],
       subscribe => [  Exec["iTop_install_${name}"],
                       File[$responsefile],
-                      Class["Itop::Resource::Extensions_${extension_install_type}"],
+                      Itop::Resource::Extensions_git[$name]
+                      #Class["Itop::Resource::Extensions_${extension_install_type}"],
       ],
       notify      => Service['httpd'],
     }

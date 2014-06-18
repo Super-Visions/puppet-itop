@@ -24,8 +24,9 @@ class itop::extensions (
   validate_hash($extension_hash)
   if( $extension_hash )
   {
-    $defaults = {}
-    $defaults['revision'] = $default_revision
+    $defaults = {
+      revision => $default_revision
+    }
     create_resources( "itop::resource::extension_${extension_install_type}", $extension_hash, $defaults )
   }
 }

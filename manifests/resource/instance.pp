@@ -138,7 +138,7 @@ define itop::resource::instance (
                       Itop::Resource::Extensions_git[$name]
                       #Class["Itop::Resource::Extensions_${extension_install_type}"],
       ],
-      notify      => Service['httpd'],
+      #notify      => Service['httpd'],
     }
 
   }

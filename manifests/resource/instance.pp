@@ -29,15 +29,16 @@ define itop::resource::instance (
   }
 
   cron { "iTop_cron_${name}":
-    ensure  => absent,
+    ensure  => present,
     command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
-  }
-
-  cron { "iTop_cron_${name}_${user}":
-    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
-    user    => $user,
     minute  => '*/5',
   }
+
+  # cron { "iTop_cron_${name}_${user}":
+  #   command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
+  #   user    => $user,
+  #   minute  => '*/5',
+  # }
 
   file { "${docroot}/toolkit/unattended-install.php":
     ensure  => present,

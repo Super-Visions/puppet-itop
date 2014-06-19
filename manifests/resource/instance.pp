@@ -23,6 +23,17 @@ define itop::resource::instance (
 )
 {
 
+  $docroot = "${installroot}/${name}/http"
+
+  $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
+  $configfile = "${docroot}/conf/production/config-itop.php"
+  $template_configfile = "${docroot}/conf/production/template-config-itop.php"
+
+  $prev_conf_file = $install_mode? {
+    'upgrade' => $template_configfile,
+    'install' => '',
+  }
+
   file { [ "${installroot}/${name}" ]:
     ensure  => directory,
     mode    => '0755',
@@ -34,8 +45,6 @@ define itop::resource::instance (
     owner   => $user,
     group   => $group,
   }
-
-  $docroot = "${installroot}/${name}/http"
 
   #$ext_str = join($extensions, ',')
   $ext_str = ''
@@ -67,6 +76,49 @@ define itop::resource::instance (
     require => File[$docroot],
   }
 
+  concat { "${name}_itop_template_configfile":
+    path  => "${template_configfile}_test",
+    owner => $user,
+    group => $group,
+    mode  => '0640'
+  }
+
+  concat::fragment{ "${name}_config_template_header":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/001_header.php.erb"),
+    order   => '001',
+  }
+
+  concat::fragment{ "${name}_config_template_settings":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/010_mysettings.php.erb"),
+    order   => '010',
+  }
+
+  concat::fragment{ "${name}_config_template_mymodulesettings_header":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/100_mymodulesettings_header.php.erb"),
+    order   => '100',
+  }
+
+  concat::fragment{ "${name}_config_template_mymodulesettings_footer":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/900_mymodulesettings_footer.php.erb"),
+    order   => '900',
+  }
+
+  concat::fragment{ "${name}_config_template_mymodules":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/990_mymodules.php.erb"),
+    order   => '990',
+  }
+
+  concat::fragment{ "${name}_config_template_footer":
+    target  => "${name}_itop_template_configfile",
+    content => template("itop/config_itop/999_footer.php.erb"),
+    order   => '999',
+  }
+
   # If extension install type = git
   # Manage vcsrepo's directly here
   case $extension_install_type {
@@ -87,112 +139,70 @@ define itop::resource::instance (
     mode    => '0644',
     source  => 'puppet:///modules/itop/unattended-install.php',
     require => Exec["iTop_install_${name}"],
+    owner   => $user,
+    group   => $group,
   }
 
   file { "${docroot}/webservices/export-simpleclient.php":
     ensure  => link,
     target  => "${docroot}/webservices/export.php",
     require => Exec["iTop_install_${name}"],
+    owner   => $user,
+    group   => $group,
   }
 
   file { "${docroot}/webservices/rest-simpleclient.php":
     ensure  => link,
     target  => "${docroot}/webservices/rest.php",
     require => Exec["iTop_install_${name}"],
+    owner   => $user,
+    group   => $group,
   }
-
-  $configfile = "${docroot}/conf/production/config-itop.php"
-  $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
 
   file { $responsefile:
     ensure  => present,
     mode    => '0644',
     content => template('itop/itop-auto-install.xml.erb'),
     require => File["${docroot}/toolkit/unattended-install.php"],
+    owner   => $user,
+    group   => $group,
   }
 
   case $install_mode {
     'upgrade': {
-      $creates = undef
-      $run_installer = true
+      #$prev_conf_file = $configfile
+      #notify {"Prev conf file :${prev_conf_file}:": require => File[$responsefile], }
+      exec { "iTop_unattended_install_${name}":
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+        logoutput   => true,
+        cwd         => "${docroot}/toolkit",
+        user        => $user,
+        #refreshonly => true,
+        subscribe   => [
+                          Exec["iTop_install_${name}"],
+                          File[$responsefile],
+                          Itop::Resource::Extensions_git[$name]
+                       ],
+      }
     }
     'install': {
       $creates = "${docroot}/conf/production/config-itop.php"
-      $run_installer = true
+      #$prev_conf_file = ''
+      exec { "iTop_unattended_install_${name}":
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+        logoutput   => true,
+        cwd         => "${docroot}/toolkit",
+        creates     => $creates,
+        user        => $user,
+        refreshonly => true,
+        subscribe   => [
+                          Exec["iTop_install_${name}"],
+                          File[$responsefile],
+                          Itop::Resource::Extensions_git[$name]
+                       ],
+      }
     }
     'manual': { }
-    '': {}
     default: { fail("Unrecognized Install Mode: ${install_mode}") }
   }
-
-  if $run_installer {
-
-    exec { "iTop_unattended_install_${name}":
-      #command   => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
-      command   => 'date',
-      logoutput => true,
-      cwd       => "${docroot}/toolkit",
-      creates   => $creates,
-      user      => $user,
-      #require   => File[$responsefile],
-      subscribe => [  Exec["iTop_install_${name}"],
-                      File[$responsefile],
-                      Itop::Resource::Extensions_git[$name]
-                      #Class["Itop::Resource::Extensions_${extension_install_type}"],
-      ],
-      #notify      => Service['httpd'],
-    }
-
-  }
-
-  # case $install_mode {
-  #   'upgrade': {
-  #     $prev_conf_file = $configfile
-  #
-  #     exec { "iTop_unattended_upgrade_${name}":
-  #       command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
-  #       #onlyif      => [  "test -e ${configfile}",
-  #       #],
-  #       logoutput   => true,
-  #       cwd         => "${docroot}/toolkit",
-  #       path        => '/usr/bin:/usr/sbin:/bin',
-  #       user        => $user,
-  #       refreshonly => true,
-  #       require     => File["${docroot}/toolkit/unattended-install.php"],
-  #       subscribe   => [  Exec["iTop_install_${name}"],
-  #                         File["${docroot}/toolkit/itop-auto-install.xml"],
-  #       ],
-  #       notify      => Service['httpd'],
-  #     }
-  #   }
-  #   'install': {
-  #     $prev_conf_file = ''
-  #
-  #     exec { "iTop_unattended_install_${name}":
-  #       command   => "php unattended-install.php --response_file=${responsefile} --install=1",
-  #       logoutput => true,
-  #       cwd       => "${docroot}/toolkit",
-  #       creates   => "${docroot}/conf/production/config-itop.php",
-  #       user      => $user,
-  #       require   => File["${docroot}/toolkit/unattended-install.php"],
-  #       subscribe => [  Exec["iTop_install_${name}"],
-  #                       File["${docroot}/toolkit/itop-auto-install.xml"],
-  #       ],
-  #       notify      => Service['httpd'],
-  #     }
-  #   }
-  #   'manual': { }
-  #   '': {}
-  #   default: { fail("Unrecognized Install Mode: ${install_mode}") }
-  # }
-
-  #notify{"Docroot = ${docroot} with Install Mode = ${install_mode} and Config File ${configfile}":}
-
-  #file { "${docroot}/toolkit/itop-auto-install.xml":
-  #  ensure  => present,
-  #  mode    => '0644',
-  #  content => template('itop/itop-auto-install.xml.erb'),
-  #  require => file["${docroot}/toolkit/unattended-install.php"],
-  #}
-
 }

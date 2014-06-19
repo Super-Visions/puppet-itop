@@ -10,7 +10,7 @@ define itop::resource::extension_git (
 
   $extension_name = regsubst( $name, "^${instance_name}_", '' )
 
-  #notify { "instance_name ${instance_name}:${extension_name}: ": }
+  notify { "instance_name ${instance_name}:${extension_name}: ": }
 
   if ! $ext_dir {
     $fix_ext_dir = "${::itop::ext_dir}/${extension_name}/${extension_name}/web/extensions"
@@ -24,6 +24,12 @@ define itop::resource::extension_git (
     source   => "${extension_src_url}/${extension_name}.git",
     revision => $revision,
     user     => $user,
+  }
+
+  concat::fragment{ "${extension_name}_config_template":
+    target  => "${instance_name}_itop_template_configfile",
+    content => template("itop/config_itop/500_mymodulesettings.php.erb"),
+    order   => '500',
   }
 
 }

@@ -28,7 +28,7 @@
 <% @default_extensions.each do |ext| -%>
     <item><%= ext.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
-<% @extensions.each do |key,data| -%>
+<% @extensions.keys.sort.each do |key,data| -%>
     <item><%= key.gsub(/-(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/i, '') %></item>
 <% end -%>
   </selected_modules>

@@ -128,7 +128,8 @@ define itop::resource::instance (
   if $run_installer {
 
     exec { "iTop_unattended_install_${name}":
-      command   => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+      #command   => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+      command   => 'date',
       logoutput => true,
       cwd       => "${docroot}/toolkit",
       creates   => $creates,

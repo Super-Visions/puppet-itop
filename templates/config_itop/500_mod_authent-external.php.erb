@@ -1,0 +1,22 @@
+	'authent-external' => array (
+		<% if @config['debug'] %>'debug' => <%= @config['debug'] %>,<% end %>
+		<% if @config['active'] %>'active' => <%= @config['active'] %>,<% end %>
+		<% if @config['default_organization_code'] %>'active' => <%= @config['default_organization_code'] %>,<% end %>
+		<% if @config['host'] %>'host' => '<%= @config['host'] %>',<% end %>
+		<% if @config['port'] %>'port' => <%= @config['port'] %>,<% end %>
+		<% if @config['default_user'] %>'default_user' => '<%= @config['default_user'] %>',<% end %>
+		<% if @config['default_pwd'] %>'default_pwd' => '<%=  @config['default_pwd'] %>',<% end %>
+		<% if @config['base_dn'] %>'base_dn' => '<%=  @config['base_dn'] %>',<% end %>
+		<% if @config['profile_dn'] %>'profile_dn' => array (
+			  <%  @config['profile_dn'].each_with_index do |val,index| %>
+			  <%= index %> => '<%= value %>',
+			  <% end %>
+			),
+		<% end %>
+		<% if @config['profile_query'] %>'base_dn' => '<%=  @config['profile_query'] %>',<% end %>
+		<% if @config['user_query'] %>'user_query' => '<%=  @config['user_query'] %>',<% end %>
+		'options' => array (
+			  17 => 3,
+			  8 => 0,
+			),
+	),

@@ -9,7 +9,7 @@
 		<% if @config['default_pwd'] %>'default_pwd' => '<%=  @config['default_pwd'] %>',<% end %>
 		<% if @config['base_dn'] %>'base_dn' => '<%=  @config['base_dn'] %>',<% end %>
 		<% if @config['profile_dn'] %>'profile_dn' => array (
-			  <%  @config['profile_dn'].each_with_index do |val,index| %>
+			  <%  @config['profile_dn'].each_with_index do |value,index| %>
 			  <%= index %> => '<%= value %>',
 			  <% end %>
 			),

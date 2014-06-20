@@ -27,7 +27,8 @@ define itop::resource::instance (
 
   $docroot = "${installroot}/${name}/http"
 
-  $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
+  $responsefile_install = "${docroot}/toolkit/itop-auto-install.xml"
+  $responsefile_upgrade = "${docroot}/toolkit/itop-auto-upgrade.xml"
   $configfile = "${docroot}/conf/production/config-itop.php"
   $template_configfile = "${docroot}/conf/template-production-config-itop.php"
 
@@ -161,7 +162,7 @@ define itop::resource::instance (
     group   => $group,
   }
 
-  file { $responsefile:
+  file { $responsefile_install:
     ensure  => present,
     mode    => '0644',
     content => template('itop/itop-auto-install.xml.erb'),
@@ -170,17 +171,31 @@ define itop::resource::instance (
     group   => $group,
   }
 
+  file { $responsefile_upgrade:
+    ensure  => present,
+    mode    => '0644',
+    content => template('itop/itop-auto-upgrade.xml.erb'),
+    require => File["${docroot}/toolkit/unattended-install.php"],
+    owner   => $user,
+    group   => $group,
+  }
+
+  # php unattended-install.php --response_file=<path to the XML response file> [--install=1] [--clean=1]
+  # The options are:
+  # --install=1 to perform the installation
+  # --clean=1 to erase the config file and the database before doing the installation (useful for testing the installations several times in a row)
+
   case $install_mode {
     'upgrade': {
-      exec { "iTop_unattended_install_${name}":
-        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+      exec { "iTop_unattended_upgrade_${name}":
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile_upgrade} --install=1",
         logoutput   => true,
         cwd         => "${docroot}/toolkit",
         user        => $user,
         refreshonly => true,
         subscribe   => [
                           Exec["iTop_install_${name}"],
-                          File[$responsefile],
+                          File[$responsefile_upgrade],
                           File["${template_configfile}"],
                           Itop::Resource::Extensions_git[$name],
                        ],
@@ -189,7 +204,7 @@ define itop::resource::instance (
     'install': {
       $creates = "${docroot}/conf/production/config-itop.php"
       exec { "iTop_unattended_install_${name}":
-        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile_install} --install=1",
         logoutput   => true,
         cwd         => "${docroot}/toolkit",
         creates     => $creates,
@@ -197,7 +212,20 @@ define itop::resource::instance (
         refreshonly => true,
         subscribe   => [
                           Exec["iTop_install_${name}"],
-                          File[$responsefile],
+                          File[$responsefile_install],
+                          File["${template_configfile}"],
+                          Itop::Resource::Extensions_git[$name],
+                       ],
+      }
+      exec { "iTop_unattended_install_upgrade_${name}":
+        command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile_upgrade} --install=1",
+        logoutput   => true,
+        cwd         => "${docroot}/toolkit",
+        user        => $user,
+        refreshonly => true,
+        subscribe   => [
+                          Exec["iTop_unattended_install_${name}"],
+                          File[$responsefile_upgrade],
                           File["${template_configfile}"],
                           Itop::Resource::Extensions_git[$name],
                        ],

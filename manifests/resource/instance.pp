@@ -59,7 +59,7 @@ define itop::resource::instance (
 
   cron { "iTop_cron_${name}":
     ensure  => present,
-    command => "/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null",
+    command => "su - ${user} -c '/usr/bin/php ${docroot}/webservices/cron.php --param_file=${docroot}/webservices/cron.params &> /dev/null'",
     minute  => '*/5',
   }
 
@@ -172,8 +172,6 @@ define itop::resource::instance (
 
   case $install_mode {
     'upgrade': {
-      #$prev_conf_file = $configfile
-      #notify {"Prev conf file :${prev_conf_file}:": require => File[$responsefile], }
       exec { "iTop_unattended_install_${name}":
         command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
         logoutput   => true,
@@ -190,7 +188,6 @@ define itop::resource::instance (
     }
     'install': {
       $creates = "${docroot}/conf/production/config-itop.php"
-      #$prev_conf_file = ''
       exec { "iTop_unattended_install_${name}":
         command     => "chmod a+w ${configfile}; php unattended-install.php --response_file=${responsefile} --install=1",
         logoutput   => true,

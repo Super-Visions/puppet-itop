@@ -7,6 +7,7 @@ define itop::resource::instance (
   $group              = 'apache',
   $extensions         = {},
   $default_extensions = [],
+  $extension_config   = {},
   $install_mode       = undef,
   $db_server          = 'localhost',
   $db_user            = 'root',
@@ -20,6 +21,7 @@ define itop::resource::instance (
   $src_dir            = $itop::src_dir,
   $default_revision   = undef,
   $extension_install_type = $itop::extension_install_type,
+  $allowed_login_types    = undef,
 )
 {
 
@@ -77,7 +79,7 @@ define itop::resource::instance (
   }
 
   concat { "${name}_itop_template_configfile":
-    path  => "${template_configfile}_test",
+    path  => "${template_configfile}",
     owner => $user,
     group => $group,
     mode  => '0640'
@@ -177,11 +179,12 @@ define itop::resource::instance (
         logoutput   => true,
         cwd         => "${docroot}/toolkit",
         user        => $user,
-        #refreshonly => true,
+        refreshonly => true,
         subscribe   => [
                           Exec["iTop_install_${name}"],
                           File[$responsefile],
-                          Itop::Resource::Extensions_git[$name]
+                          File["${template_configfile}"],
+                          Itop::Resource::Extensions_git[$name],
                        ],
       }
     }
@@ -198,7 +201,8 @@ define itop::resource::instance (
         subscribe   => [
                           Exec["iTop_install_${name}"],
                           File[$responsefile],
-                          Itop::Resource::Extensions_git[$name]
+                          File["${template_configfile}"],
+                          Itop::Resource::Extensions_git[$name],
                        ],
       }
     }

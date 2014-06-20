@@ -29,11 +29,11 @@ define itop::resource::instance (
 
   $responsefile = "${docroot}/toolkit/itop-auto-install.xml"
   $configfile = "${docroot}/conf/production/config-itop.php"
-  $template_configfile = "${docroot}/conf/production/template-config-itop.php"
+  $template_configfile = "${docroot}/conf/template-production-config-itop.php"
 
   $prev_conf_file = $install_mode? {
     'upgrade' => $template_configfile,
-    'install' => '',
+    'install' => $template_configfile,
   }
 
   file { [ "${installroot}/${name}" ]:

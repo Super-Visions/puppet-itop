@@ -1,18 +1,27 @@
 # init file for iTop Class
 class itop (
-  $version      = $itop::params::itop_version,
-  $base_src_dir = $itop::params::itop_base_src_dir,
-  $install_type = $itop::params::itop_install_type,
-  $url          = $itop::params::itop_url
-) inherits itop::params {
+  $installroot,
+  $itop_version    = undef,
+  $zip_url        = undef,
+  $base_src_url        = undef,
+  $extension_src_url        = undef,
+  $base_src_dir   = '/usr/local/itop',
+  $base_install_type   = 'zip',
+  $extension_install_type   = 'zip',
+  $extension_hash = {},
+  $instance_hash  = {},
+)
+{
+
+  ### Declaring calculated variables
+  $bin_dir        = "${base_src_dir}/bin"
+  $zip_dir        = "${base_src_dir}/zip"
+  $git_dir        = "${base_src_dir}/git"
+  $src_dir        = "${base_src_dir}/${itop_version}"
+  $ext_dir        = "${src_dir}/extensions"
 
   anchor  { 'itop::start': }->
-  class   { 'itop::install':
-    version      => $version,
-    install_type => $install_type,
-    url          => $url,
-    base_src_dir => $base_src_dir,
-  }->
+  class   { 'itop::install': }->
   class   { 'itop::instances': }->
   anchor  { 'itop::end': }
 

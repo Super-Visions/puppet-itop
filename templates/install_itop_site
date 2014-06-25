@@ -239,15 +239,21 @@ sub list_extension_dirs
   my $dir = "${source}/extensions/${name}/${name}/web/extensions";
   opendir(my $dh, $dir) || die "can't opendir $dir : $!";
 
-  #print "------ opening dir :$dir:\n";
+  print "---- Name :${name}: -- opening dir :$dir:\n" if $debug;
 
   while( my $i = readdir $dh) {
     if( $i =~ /^\./ ) { next }
-    if( ! -e "${dir}/$i/module.$i.php" ) {
+
+    print "\$i :${i}:\n"  if $debug;
+    print "Compare : ${dir}/${i}/module.${i}.php\n"  if $debug;
+
+    if( ! -e "${dir}/${i}/module.${i}.php" ) {
       next;
     }
     push( @extensions, $i );
     $extensions{$i} = 1;
+    print "Ext :$i:\n"  if $debug;
+    last;
   }
   closedir $dh;
   @extensions;
@@ -284,6 +290,7 @@ sub comp_ext_ver
   my $dir = "${source}/extensions/${name}/${name}/web/extensions";
 
   foreach my $ext ( @extensions ) {
+
     my ( $new_ver ) = read_ext_version( $dir, $ext );
 
     my ( $installed_ver ) = read_ext_version( "${root}/extensions", $ext );
@@ -314,13 +321,13 @@ sub read_ext_version
 
   print "Reading version from :${dir}/${name}/module.${name}.php:\n" if $debug;
 
-  my @lines = file_to_array("${dir}/${name}/module.${name}.php");
-  foreach my $line ( @lines ) {
-    if( $line =~  /^\s+'$name\/(.+)'/ ) {
-      return $1;
+  if ( -d "${dir}/${name}" && -f "${dir}/${name}/module.${name}.php" ) {
+    my @lines = file_to_array("${dir}/${name}/module.${name}.php");
+    foreach my $line ( @lines ) {
+      if( $line =~  /^\s+'$name\/(.+)'/ ) {
+        return $1;
+      }
     }
   }
   return 0;
 }
-
-

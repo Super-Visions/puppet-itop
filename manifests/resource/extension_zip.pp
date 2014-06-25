@@ -6,17 +6,17 @@
 #                  - Internal structure for the zip is:
 #                            web/extensions/<extension directory name>
 #
-define itop::resource::extension (
-  $url        = hiera('itop::params::itop_url'),
-  $target     = $itop::params::itop_ext_dir,
-  $zip_target = $itop::params::itop_zip_dir,
+define itop::resource::extension_zip (
+  $extension_src_url = $itop::extension_src_url,
+  $target     = $itop::ext_dir,
+  $zip_target = $itop::zip_dir,
 )
 {
   archive { $name:
     ensure     => present,
     checksum   => true,
     extension  => 'zip',
-    url        => "${url}/${name}.zip",
+    url        => "${extension_src_url}/${name}.zip",
     target     => $target,
     src_target => $zip_target,
   }

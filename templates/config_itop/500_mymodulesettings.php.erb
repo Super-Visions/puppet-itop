@@ -1,0 +1,24 @@
+	'<%= @extension_name %>' => array (
+		'host' => 'no-localhost-4',
+		'port' => 389,
+		'default_user' => '',
+		'default_pwd' => '',
+		'base_dn' => 'dc=testingggggggggggggggggggggggggggggggggggggggg,dc=com',
+		'user_query' => '(&(uid=%1$s)(inetuserstatus=ACTIVE))',
+		'options' => array (
+			  17 => 3,
+			  8 => 0,
+			),
+		'debug' => false,
+	),
+  <!-- 'combodo-email-synchro' => array (
+		'debug' => false,
+		'periodicity' => 30,
+		'notify_errors_to' => '',
+		'notify_errors_from' => '',
+		'introductory-patterns' => array (
+			  0 => '/^le .+ a écrit :$/i',
+			  1 => '/^on .+ wrote:$/i',
+			  2 => '|^[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} .+:$|',
+			),
+	), -->

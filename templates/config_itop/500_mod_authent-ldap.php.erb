@@ -1,0 +1,15 @@
+	'authent-ldap' => array (
+		<% if @config['host'] %>'host' => '<%= @config['host'] %>',<% end %>
+		<% if @config['port'] %>'port' => <%= @config['port'] %>,<% end %>
+		<% if @config['default_user'] %>'default_user' => '<%= @config['default_user'] %>',<% end %>
+		<% if @config['default_pwd'] %>'default_pwd' => '<%=  @config['default_pwd'] %>',<% end %>
+		<% if @config['base_dn'] %>'base_dn' => '<%=  @config['base_dn'] %>',<% end %>
+		<% if @config['user_query'] %>'user_query' => '<%=  @config['user_query'] %>',<% end %>
+		<% if @config['options'] %>'options' => array (
+				<%  @config['options'].each do |key,value| %>
+				<%= key %> => <%= value %>,
+				<% end %>
+			),
+		<% end %>
+		'debug' => false,
+	),

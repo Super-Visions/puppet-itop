@@ -1,0 +1,16 @@
+	'superv-bonita' => array (
+		<% if @config['allowed_classes'] %>'allowed_classes' => array (
+				<%  @config['allowed_classes'].each_with_index do |value,index| %>
+				<%= index %> => '<%= value %>',
+				<% end %>
+			),
+		<% end %>
+		<% if @config['synchro_user_name'] %>'synchro_user_name' => '<%= @config['synchro_user_name'] %>',<% end %>
+		<% if @config['debug'] %>'debug' => '<%= @config['debug'] %>',<% end %>
+		<% if @config['bonita_user'] %>'bonita_user' => '<%= @config['bonita_user'] %>',<% end %>
+		<% if @config['restuser'] %>'restuser' => '<%= @config['restuser'] %>',<% end %>
+		<% if @config['restpass'] %>'restpass' => '<%= @config['restpass'] %>',<% end %>
+		<% if @config['restpass'] %>'restpass' => '<%= @config['restpass'] %>',<% end %>
+		<% if @config['process_name'] %>'process_name' => '<%= @config['process_name'] %>',<% end %>
+		<% if @config['resturl'] %>'restURL' => '<%= @config['resturl'] %>',<% end %>
+	),

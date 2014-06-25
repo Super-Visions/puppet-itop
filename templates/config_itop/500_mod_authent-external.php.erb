@@ -16,8 +16,10 @@
 		<% end %>
 		<% if @config['profile_query'] %>'base_dn' => '<%=  @config['profile_query'] %>',<% end %>
 		<% if @config['user_query'] %>'user_query' => '<%=  @config['user_query'] %>',<% end %>
-		'options' => array (
-			  17 => 3,
-			  8 => 0,
+		<% if @config['options'] %>'options' => array (
+				<%  @config['options'].each do |key,value| %>
+				<%= key %> => <%= value %>,
+				<% end %>
 			),
+		<% end %>
 	),

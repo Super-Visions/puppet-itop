@@ -199,6 +199,7 @@ define itop::resource::instance (
         cwd         => "${docroot}/toolkit",
         user        => $user,
         refreshonly => true,
+        timeout     => 1200,
         subscribe   => [
                           Exec["iTop_install_${name}"],
                           File[$responsefile_upgrade],
@@ -216,6 +217,7 @@ define itop::resource::instance (
         creates     => $creates,
         user        => $user,
         refreshonly => true,
+        timeout     => 1200,
         subscribe   => [
                           Exec["iTop_install_${name}"],
                           File[$responsefile_install],
@@ -229,6 +231,7 @@ define itop::resource::instance (
         cwd         => "${docroot}/toolkit",
         user        => $user,
         refreshonly => true,
+        timeout     => 1200,
         subscribe   => [
                           Exec["iTop_unattended_install_${name}"],
                           File[$responsefile_upgrade],

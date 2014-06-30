@@ -7,11 +7,11 @@
 #                                  web/extensions/<extension directory name>
 #
 class itop::extensions (
-  $extension_hash = $itop::extension_hash,
-  $extension_install_type   = $itop::extension_install_type,
-  $base_src_dir   = $itop::base_src_dir,
-  $git_target     = $itop::git_dir,
-  $default_revision = undef,
+  $extension_hash         = $itop::extension_hash,
+  $extension_install_type = $itop::extension_install_type,
+  $base_src_dir           = $itop::base_src_dir,
+  $git_target             = $itop::git_dir,
+  $default_revision       = undef,
 )
 {
   #Class['itop::install'] -> Class['itop::extensions']

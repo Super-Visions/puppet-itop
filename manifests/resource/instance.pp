@@ -20,6 +20,7 @@ define itop::resource::instance (
   $modules            = undef,
   $src_dir            = $itop::src_dir,
   $default_revision   = undef,
+  $default_install    = undef,
   $extension_install_type = $itop::extension_install_type,
   $allowed_login_types    = undef,
 )
@@ -127,11 +128,12 @@ define itop::resource::instance (
   case $extension_install_type {
     git: {
       itop::resource::extensions_git { $name:
-        extensions => $extensions,
-        docroot    => $docroot,
+        extensions       => $extensions,
+        docroot          => $docroot,
         default_revision => $default_revision,
-        user => $user,
-        require => Exec["iTop_install_${name}"],
+        default_install  => $default_install,
+        user             => $user,
+        require          => Exec["iTop_install_${name}"],
       }
     }
     default: {}

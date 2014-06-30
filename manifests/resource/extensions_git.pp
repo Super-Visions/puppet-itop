@@ -2,6 +2,7 @@ define itop::resource::extensions_git (
   $extensions,
   $docroot,
   $default_revision,
+  $default_install,
   $user,
 )
 {
@@ -17,7 +18,8 @@ define itop::resource::extensions_git (
       instance_name => $name,
       user => $user,
       revision => $default_revision,
-      ext_dir  => "$docroot/extensions",
+      install  => $default_install,
+      ext_dir  => "${docroot}/extensions",
     }
 
     create_resources( "itop::resource::extension_git", $prefixed_extensions, $defaults )

@@ -2,7 +2,7 @@
 	'authent-external' => array (
 		<% if @config['debug'] %>'debug' => <%= @config['debug'] %>,<% end %>
 		<% if @config['active'] %>'active' => <%= @config['active'] %>,<% end %>
-		<% if @config['default_organization_code'] %>'active' => '<%= @config['default_organization_code'] %>',<% end %>
+		<% if @config['default_organization_code'] %>'default_organization_code' => '<%= @config['default_organization_code'] %>',<% end %>
 		<% if @config['host'] %>'host' => '<%= @config['host'] %>',<% end %>
 		<% if @config['port'] %>'port' => <%= @config['port'] %>,<% end %>
 		<% if @config['default_user'] %>'default_user' => '<%= @config['default_user'] %>',<% end %>
